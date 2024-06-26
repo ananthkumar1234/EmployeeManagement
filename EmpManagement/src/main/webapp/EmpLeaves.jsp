@@ -1,0 +1,297 @@
+<%@ page import="java.util.List"%>
+<%@ page import="com.empmngt.enities.Roles"%>
+<%@ page import="com.empmngt.jdbc.DBConnect"%>
+<%@ page import="com.empmngt.dao.EmpDao"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="javax.servlet.http.HttpSession"%>
+<%@ page import="com.empmngt.enities.Employees"%>
+<%@ page import="com.empmngt.enities.Leaves"%>
+<%@ page import="com.empmngt.enities.Attendance"%>
+<%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Employee Leaves</title>
+<style>
+/* styles.css */
+
+body {
+    background-color: #ADD8E6;
+    background-image: url("Images/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 100%;
+    margin: 40px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+}
+
+.content {
+    display: flex;
+}
+
+.sidebar {
+    width: 25%;
+    margin-left: 15px;
+    margin-top: 80px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 0.5px solid black;
+    border-radius: 8px;
+    height: 50%;
+}
+
+.main-content {
+    width: 75%;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: orange;
+}
+
+.tools {
+    margin-bottom: 20px;
+}
+
+.tools h3 {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    margin: 0;
+    border-radius: 4px 4px 0 0;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-container a {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #333;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.filter {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filter form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.filter label {
+    font-weight: bold;
+    color: #333;
+}
+
+.filter input[type="text"],
+.filter input[type="date"],
+.filter select {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    width: 150px;
+}
+
+.filter button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.filter button:hover {
+    background-color: #0056b3;
+}
+
+.button-container a:hover {
+    background-color: #0056b3;
+}
+
+</style>
+<script>
+function toggleMonthDropdown() {
+    var yearInput = document.getElementById('year');
+    var monthDropdown = document.getElementById('month');
+    monthDropdown.disabled = yearInput.value.trim() === "";
+}
+window.onload = function() {
+    toggleMonthDropdown(); // Initial check
+}
+</script>
+</head>
+<body>
+<%
+	HttpSession ses1 = request.getSession();
+	EmpDao er1 = new EmpDao(DBConnect.getConnection());
+
+    String msg = (String)request.getAttribute("msg");
+    int id = Integer.parseInt(request.getParameter("id"));
+    String role2=request.getParameter("role");
+    
+    int mid=((Employees)ses1.getAttribute("employee")).getEmpId();
+    String sesrole= er1.getRoleById(mid);
+%>
+<%@include file="navbar.jsp"%>
+<div class="container">
+    <div class="sidebar">
+        <div class="tools">
+            <h3>Links</h3>
+            <div class="button-container">
+                <!-- Add your links here -->
+                <a href="EmpLeaves.jsp?id=<%= id%>&role=<%= role2 %>">Leaves</a>
+                <a href="EmpAttend.jsp?id=<%= id %>&role=<%= role2 %>">Attendance</a>
+                <a href="Detail.jsp?id=<%= id %>&role=<%= role2 %>">Detail</a>
+                
+                <%if(role2!=null && role2.equals("Manager")) 
+                    { 
+                   %>
+                   <a href="Managers.jsp?id=<%= id %>&role=<%= role2 %>">Add Reportees</a>
+					<%} %>  
+					
+					<%if(sesrole!=null && !sesrole.equals("Trainee")) 
+                    { 
+                   %>
+                   <a href="ReporteeLeave.jsp?id=<%= id %>&role=<%= role2 %>">Apply Leave</a>
+					<%} %>  
+            </div>
+            <% 
+            if(msg != null) {
+                out.print(msg);
+            }
+            %>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="form-container">
+            <h2>Employee Leave Details</h2>
+            <!-- Filter Container -->
+            <div class="filter">
+                <form action="filterLeave" method="get">
+                    <input type="hidden" name="id" value="<%= id %>">
+                    <label for="year">Year:</label>
+                    <input type="text" id="year" name="year" onkeyup="toggleMonthDropdown()" value="<%= request.getParameter("year") != null ? request.getParameter("year") : "" %>">
+                    <label for="month">Month:</label>
+                    <select id="month" name="month">
+                        <option value="" <%= "".equals(request.getParameter("month")) ? "selected" : "" %>>Select Month</option>
+                        <option value="01" <%= "01".equals(request.getParameter("month")) ? "selected" : "" %>>January</option>
+                        <option value="02" <%= "02".equals(request.getParameter("month")) ? "selected" : "" %>>February</option>
+                        <option value="03" <%= "03".equals(request.getParameter("month")) ? "selected" : "" %>>March</option>
+                        <option value="04" <%= "04".equals(request.getParameter("month")) ? "selected" : "" %>>April</option>
+                        <option value="05" <%= "05".equals(request.getParameter("month")) ? "selected" : "" %>>May</option>
+                        <option value="06" <%= "06".equals(request.getParameter("month")) ? "selected" : "" %>>June</option>
+                        <option value="07" <%= "07".equals(request.getParameter("month")) ? "selected" : "" %>>July</option>
+                        <option value="08" <%= "08".equals(request.getParameter("month")) ? "selected" : "" %>>August</option>
+                        <option value="09" <%= "09".equals(request.getParameter("month")) ? "selected" : "" %>>September</option>
+                        <option value="10" <%= "10".equals(request.getParameter("month")) ? "selected" : "" %>>October</option>
+                        <option value="11" <%= "11".equals(request.getParameter("month")) ? "selected" : "" %>>November</option>
+                        <option value="12" <%= "12".equals(request.getParameter("month")) ? "selected" : "" %>>December</option>
+                    </select>
+                    <button type="submit">Filter</button>
+                </form>
+            </div>
+            <div class="leave-records">
+                <h2>Leave Records</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Total Days</th>
+                            <th>Leave Type</th>
+                            <th>Leave Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% 
+                        
+                        List<Leaves> l1 = (List<Leaves>) request.getAttribute("filteredAttendance");
+                        if (l1 == null) {
+                            l1 = er1.getLeaveRecordsById(id);
+                        }
+                        for (Leaves e : l1) { 
+                    %>
+                        <tr>
+                            <td><%= e.getFromDate() %></td>
+                            <td><%= e.getToDate() %></td>
+                            <td><%= e.getTotalDays() %></td>
+                            <td><%= e.getLeaveType() %></td>
+                            <td><%= e.getLeaveStatus() %></td>
+                        </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

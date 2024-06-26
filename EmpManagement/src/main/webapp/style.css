@@ -1,0 +1,32 @@
+/* style.css */
+
+/* Light theme */
+body.light-theme {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Dark theme */
+body.dark-theme {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+/* Add specific styles for other elements as needed */
+.container {
+    max-width: 100%;
+    margin: 40px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Light theme container */
+body.light-theme .container {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Dark theme container */
+body.dark-theme .container {
+    background-color: rgba(0, 0, 0, 0.8);
+}
