@@ -45,6 +45,7 @@ request.setAttribute("eid", eid);
 %>
 <%@include file="navbar.jsp" %>
 <h2 >Welcome <% out.print(emp.getFname()+ ","+ emp.getLname());%> </h2>
+You are in Employee homepage
     <div class="banner">
         <img alt="logo" src="Images/logo.jpeg">
     
