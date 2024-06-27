@@ -1201,6 +1201,96 @@ public class EmpDao {
 		}
 		return false;
 	}
+	
+	
+	
+	public String UpdateAttendanceTable(int AID,String name,String Date, String CITime, String COTime, int eid) throws SQLException
+	{
+		String qry="Insert into AttendanceUpdate (AttendanceId,Name,Date, CheckInTime, CheckOutTime, EmployeeId) values (?,?,?,?,?,?)";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1,AID);
+		ps.setString(2,name);
+		ps.setString(3,Date);
+		ps.setString(4,CITime);
+		ps.setString(5,COTime);
+		ps.setInt(6,eid);
+		int i=ps.executeUpdate();
+		if(i>0) return "Request Sent";
+		return "Request Failed";
+		
+	}
+	
+	
+	
+	public String UpdateAttendance(int AID,String Date, String CITime, String COTime) throws SQLException
+	{
+		String qry="Update Attendance SET Date=?,CheckInTime=?, CheckOutTime=? where AttendanceId=?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setString(1,Date);
+		ps.setString(2,CITime);
+		ps.setString(3,COTime);
+		ps.setInt(4,AID);
+		int i=ps.executeUpdate();
+		
+		String qry2="Delete from AttendanceUpdate where AttendanceId=?";
+		PreparedStatement ps2 = con.prepareStatement(qry2);
+		ps2.setInt(1,AID);
+		ps2.executeUpdate();
+		
+		if(i>0) return "Updated";
+		return "Not Updated";
+		
+		
+	}
+	
+	public List<Attendance> ManagerAttendance(int mid) throws SQLException
+	{
+		List<Attendance> list = new ArrayList<>();
+		String qry="SELECT au.AttendanceId, au.Name, au.Date, au.CheckInTime as NewCheckInTime, au.CheckOutTime as NewCheckOutTime, att.CheckInTime as OldCheckInTime, att.CheckOutTime as OldCheckOutTime FROM AttendanceUpdate au JOIN Attendance att ON att.AttendanceId = au.AttendanceId WHERE au.EmployeeId IN (SELECT employee FROM Manager WHERE manager = ?)";
+		
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, mid);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			Attendance a = new Attendance();
+			a.setAttendId(rs.getInt("AttendanceId"));
+			a.setName(rs.getString("Name"));
+			a.setDate(rs.getString("Date"));
+			a.setNewcheckin(rs.getString("NewCheckInTime"));
+			a.setNewcheckout(rs.getString("NewCheckOutTime"));
+			a.setCheckin(rs.getString("OldCheckInTime"));
+			a.setCheckout(rs.getString("OldCheckOutTime"));
+			list.add(a);
+		}
+		
+		return list;
+	}
+	
+	
+	
+	public List<Attendance> HRAttendance() throws SQLException
+	{
+		List<Attendance> list = new ArrayList<>();
+		String qry="SELECT au.AttendanceId, au.Name, au.Date, au.CheckInTime as NewCheckInTime, au.CheckOutTime as NewCheckOutTime, att.CheckInTime as OldCheckInTime, att.CheckOutTime as OldCheckOutTime FROM AttendanceUpdate au JOIN Attendance att ON att.AttendanceId = au.AttendanceId";
+		
+		PreparedStatement ps = con.prepareStatement(qry);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			Attendance a = new Attendance();
+			a.setAttendId(rs.getInt("AttendanceId"));
+			a.setName(rs.getString("Name"));
+			a.setDate(rs.getString("Date"));
+			a.setNewcheckin(rs.getString("NewCheckInTime"));
+			a.setNewcheckout(rs.getString("NewCheckOutTime"));
+			a.setCheckin(rs.getString("OldCheckInTime"));
+			a.setCheckout(rs.getString("OldCheckOutTime"));
+			list.add(a);
+		}
+		
+		return list;
+	}
 
 }
 

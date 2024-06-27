@@ -7,10 +7,38 @@ public class Attendance {
 	private String date;
 	private String checkin;
 	private String checkout;
+	private String newcheckin;
+	private String newcheckout;
 	private String remarks;
+	private boolean updateRequested;
+	private String name;
 	
 	
+	public String getNewcheckin() {
+		return newcheckin;
+	}
+	public void setNewcheckin(String newcheckin) {
+		this.newcheckin = newcheckin;
+	}
+	public String getNewcheckout() {
+		return newcheckout;
+	}
+	public void setNewcheckout(String newcheckout) {
+		this.newcheckout = newcheckout;
+	}
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public boolean isUpdateRequested() {
+		return updateRequested;
+	}
+	public void setUpdateRequested(boolean updateRequested) {
+		this.updateRequested = updateRequested;
+	}
 	public String getRemarks() {
 		return remarks;
 	}

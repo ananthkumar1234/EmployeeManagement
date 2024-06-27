@@ -175,6 +175,7 @@ List<AddHoliday> list = er.displayHolidays();
         <tr>
             <th scope="col">Date</th>
             <th scope="col">Holiday Name</th>
+            <th scope="col">Day</th>
             
         </tr>
     </thead>
@@ -190,7 +191,8 @@ List<AddHoliday> list = er.displayHolidays();
         <tr class="<%= isPast ? "strikethrough" : "" %>">
             <td><%= a.getDate() %></td>
             <td><%= a.getName() %></td>
-            
+            <td><%= holidayDate.getDayOfWeek() %></td>
+
         </tr>
         <%
         }
