@@ -381,25 +381,29 @@ public class EmpDao {
 
 
 
-	public List<Attendance> getAttRecordById(int eid) throws SQLException
-	{
-		List<Attendance> list=new ArrayList<>();
-		String qry = "SELECT Date, CheckInTime, CheckOutTime,remarks FROM attendance WHERE employeeID = ? AND MONTH(Date) = MONTH(CURRENT_DATE()) AND YEAR(Date) = YEAR(CURRENT_DATE()) ORDER BY AttendanceID DESC";
-		PreparedStatement ps = con.prepareStatement(qry);
-		ps.setInt(1,eid);
-		ResultSet rs = ps.executeQuery();
+	public List<Attendance> getAttRecordById(int eid) throws SQLException {
+	    List<Attendance> list = new ArrayList<>();
+	    String qry = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+	               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+	               + "FROM attendance a "
+	               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+	               + "WHERE a.employeeID = ? AND MONTH(a.Date) = MONTH(CURRENT_DATE()) AND YEAR(a.Date) = YEAR(CURRENT_DATE()) "
+	               + "ORDER BY a.AttendanceID";
+	    PreparedStatement ps = con.prepareStatement(qry);
+	    ps.setInt(1, eid);
+	    ResultSet rs = ps.executeQuery();
 
-		while(rs.next())
-		{
-			Attendance a = new Attendance();
-			a.setDate(rs.getString("Date"));
-			a.setCheckin(rs.getString("checkintime"));
-			a.setCheckout(rs.getString("checkouttime"));
-			a.setRemarks(rs.getString("remarks"));
-			list.add(a);
-		}
-		return list;
-
+	    while (rs.next()) {
+	        Attendance a = new Attendance();
+	        a.setAttendId(rs.getInt("AttendanceId"));
+	        a.setDate(rs.getString("Date"));
+	        a.setCheckin(rs.getString("CheckInTime"));
+	        a.setCheckout(rs.getString("CheckOutTime"));
+	        a.setRemarks(rs.getString("Remarks"));
+	        a.setUpdateRequested(rs.getInt("UpdateRequested") == 1);
+	        list.add(a);
+	    }
+	    return list;
 	}
 
 

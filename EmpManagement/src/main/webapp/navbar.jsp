@@ -11,7 +11,7 @@
 
 body {
     width: 100%;
-   font-family: verdana;
+    font-family: Arial, sans-serif;
 }
 
 .navbar {
@@ -157,12 +157,11 @@ body {
 		<% if (role.equals("HR")) { %>
 		<a href="addEmp.jsp">Add Employee</a> 
 		<a href="empDetails.jsp">Employees</a>
-		
 		<a href="AddHolidays.jsp">AddHolidays</a>
 		<% } %>
 		
-		<% if (!role.equals("Trainee")){ %>
-		<a href="Leaves.jsp">LeaveRequests<%
+		<% if (role.equals("HR") || role.equals("Manager")){ %>
+		<a href="Leaves.jsp">Leave Requests<%
         Integer count = (Integer) session.getAttribute("count");
         if (count != null && count > 0) {
     %>
@@ -182,7 +181,11 @@ body {
 		
 		<% if (role.equals("Manager")) { %>
 		<a href="Reportees.jsp"> Reportees</a>
+		
 <%} %>
+		<% if (role.equals("HR") || role.equals("Manager")) { %>
+		<a href="AttendanceUpdateRequest.jsp">Attendance Update</a>
+		<%} %>
 		<div class="dropdown">
             <button class="dropbtn">
             <img alt="" src="Images/avatar2.png" style="height: 40px; width: 40px; margin-top:-55px; margin-right:-10px;">

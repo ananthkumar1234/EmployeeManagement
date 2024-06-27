@@ -139,6 +139,7 @@
     Employees emp = (Employees)sess.getAttribute("employee");
     String role1 = (String)sess.getAttribute("role");
     int eid2 = emp.getEmpId();
+    emp = eDao.GetEmpById(eid2);
     %>
 
     <div class="main">
