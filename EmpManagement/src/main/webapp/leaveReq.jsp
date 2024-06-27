@@ -208,6 +208,8 @@ HttpSession ses2 = request.getSession();
 Employees emp2 = (Employees)ses2.getAttribute("employee");
 int eid2 = emp2.getEmpId();
 
+String r= (String)ses2.getAttribute("role");
+
 EmpDao er2 = new EmpDao(DBConnect.getConnection());
 int n = er2.availDays(eid2);
 %>
@@ -259,6 +261,7 @@ int n = er2.availDays(eid2);
                 </div>
             <% } %>
         </form>
+        <%if(r.equals("HR")){ %>
         <div class="AssignLeaves">
 				<h2>Assign Leaves</h2>
 				
@@ -268,6 +271,7 @@ int n = er2.availDays(eid2);
 					<input type="submit" value="Assign">
 				</form>
 			</div>
+			<%} %>
     </div>
             
     <div class="right-column">
