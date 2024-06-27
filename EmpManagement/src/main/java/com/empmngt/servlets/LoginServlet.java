@@ -27,7 +27,10 @@ public class LoginServlet extends HttpServlet{
         
 		 try (Connection con = DBConnect.getConnection()) {
 	            EmpDao eDao = new EmpDao(con);
-	            String info = eDao.validateLogin(uname,pwd);
+	            String info="";
+	        
+	            info = eDao.validateLogin(uname,pwd);
+	            
 	            Employees emp = eDao.getEmpData(uname);
 	            
 	            EmployeeAttachment ea = new EmployeeAttachment();
@@ -62,8 +65,7 @@ public class LoginServlet extends HttpServlet{
                     req.getRequestDispatcher("EmpHome.jsp").forward(req, resp);
                 }
 	            
-	            
-		 }catch(Exception e)
+	            }catch(Exception e)
 		 {
 			 e.printStackTrace();
 		 }

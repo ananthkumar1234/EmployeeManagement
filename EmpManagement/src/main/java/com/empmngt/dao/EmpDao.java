@@ -35,7 +35,7 @@ public class EmpDao {
 
 	public String validateLogin(String uname,String pwd)throws SQLException
 	{
-		String query = "SELECT u.EmployeeID, u.Password, e.RoleID, r.RoleName FROM User_credentials u JOIN Employees e ON u.EmployeeID = e.EmployeeID JOIN Roles r ON e.RoleID = r.RoleID WHERE u.Username = ?";
+		String query = "SELECT u.EmployeeID, u.Password, e.RoleID, r.RoleName FROM User_credentials u JOIN Employees e ON u.EmployeeID = e.EmployeeID JOIN Roles r ON e.RoleID = r.RoleID WHERE binary u.Username = ?";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setString(1, uname);
 
@@ -1295,6 +1295,9 @@ public class EmpDao {
 		
 		return list;
 	}
+	
+	
+
 
 }
 

@@ -139,7 +139,9 @@ function togglePasswordVisibility() {
 			<span class="forgot"><a href="forgotpwd.jsp">Forgot Password!</a></span>
 			</div>
 		</form>
-		<% String message = request.getParameter("message"); if (message != null) { %>
+		<% String message = request.getParameter("message"); 
+		if (message != null) { 
+		%>
 		<script> alert("<%= message %>"); </script>
 		<% } %>
 	</div>
