@@ -10,7 +10,7 @@ public class Attendance {
 	private String newcheckin;
 	private String newcheckout;
 	private String remarks;
-	private boolean updateRequested;
+	private int isButtonClicked;
 	private String name;
 	
 	
@@ -33,11 +33,11 @@ public class Attendance {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public boolean isUpdateRequested() {
-		return updateRequested;
+	public int isButtonClicked() {
+		return isButtonClicked;
 	}
-	public void setUpdateRequested(boolean updateRequested) {
-		this.updateRequested = updateRequested;
+	public void setButtonClicked(int isButtonClicked) {
+		this.isButtonClicked = isButtonClicked;
 	}
 	public String getRemarks() {
 		return remarks;

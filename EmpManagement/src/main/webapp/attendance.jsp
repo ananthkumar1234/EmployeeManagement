@@ -6,7 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.empmngt.enities.Employees"%>
 <%@ page import="com.empmngt.enities.Attendance"%>
-<%@ page isELIgnored="false"%>
+
 <%@ page import="java.time.LocalTime"%>
 <%@ page import="java.time.Duration"%>
 
@@ -16,7 +16,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Add Employee</title>
+<title>Attendance</title>
 <style>
 body {
 	background-color: #ADD8E6;
@@ -283,190 +283,209 @@ tr:hover {
 </style>
 
 <script>
-        function toggleMonthDropdown() {
-            var yearInput = document.getElementById('year');
-            var monthDropdown = document.getElementById('month');
-            monthDropdown.disabled = yearInput.value.trim() === "";
-        }
+	function toggleMonthDropdown() {
+		var yearInput = document.getElementById('year');
+		var monthDropdown = document.getElementById('month');
+		monthDropdown.disabled = yearInput.value.trim() === "";
+	}
 
-        window.onload = function() {
-            toggleMonthDropdown(); // Initial check
+	window.onload = function() {
+		toggleMonthDropdown(); // Initial check
+<%Boolean f = (Boolean) request.getAttribute("flag");
+if (f != null && f) {%>
+	document.getElementById("myPopup").style.display = "block";
+<%}%>
+	}
 
-            <%
-            Boolean f = (Boolean) request.getAttribute("flag");
-            if (f != null && f) {
-            %>
-                document.getElementById("myPopup").style.display = "block";
-            <% } %>
-        }
+	function openPopup() {
+		document.getElementById("myPopup").style.display = "block";
+	}
 
-        function openPopup() {
-            document.getElementById("myPopup").style.display = "block";
-        }
+	function openPopup2(AttenId, Date, CITime, COTime) {
+		document.getElementById("attenId").value = AttenId;
+		document.getElementById("date").value = Date;
+		document.getElementById("cit").value = CITime;
+		document.getElementById("cot").value = COTime;
+		document.getElementById("myPopup2").style.display = "block";
+	}
 
-        function openPopup2(AttenId, Date, CITime, COTime) {
-            document.getElementById("attenId").value = AttenId;
-            document.getElementById("date").value = Date;
-            document.getElementById("cit").value = CITime;
-            document.getElementById("cot").value = COTime;
-            document.getElementById("myPopup2").style.display = "block";
-        }
-
-        function closePopup(popupId) {
-            document.getElementById(popupId).style.display = "none";
-        }
-    </script>
+	function closePopup(popupId) {
+		document.getElementById(popupId).style.display = "none";
+	}
+</script>
 </head>
 <body>
-    <jsp:include page="navbar.jsp" />
-    
-    <%
-    String msg = (String) request.getAttribute("msg");
-    HttpSession ses = request.getSession();
-    Employees emp = (Employees) ses.getAttribute("employee");
-    int eid = emp.getEmpId();
-    EmpDao empDao = new EmpDao(DBConnect.getConnection());
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    List<Attendance> attendanceList = (List<Attendance>) request.getAttribute("filteredAttendance");
-    String empName = emp.getFname() + " " + emp.getLname();
-    %>
+	<jsp:include page="navbar.jsp" />
 
-    <div class="container">
-        <div class="content">
-            <div class="sidebar">
-                <div class="tools">
-                    <h3>Attendance</h3>
-                    <div class="button-container">
-                        <form action="insertLogin" method="post">
-                            <input type="submit" value="Log In" name="login">
-                        </form>
-                        <form action="updateLogout" method="post">
-                            <input type="submit" value="Log Out" name="logout">
-                        </form>
-                    </div>
-                    <% if (msg != null) { %>
-                        <p><%= msg %></p>
-                    <% } %>
-                </div>
-            </div>
-            <div class="main-content">
-                <div class="form-container">
-                    <h2>Attendance List</h2>
-                    <div class="filter">
-                        <form action="filterAttendance" method="get">
-                            <input type="hidden" name="id" value="<%= eid %>">
-                            <input type="hidden" name="origin" value="attendance">
-                            <label for="year">Year:</label>
-                            <input type="text" id="year" name="year" onkeyup="toggleMonthDropdown()" value="<%= request.getParameter("year") != null ? request.getParameter("year") : "" %>">
-                            <label for="month">Month:</label>
-                            <select id="month" name="month">
-                                <option value="" <%= "".equals(request.getParameter("month")) ? "selected" : "" %>>Select Month</option>
-                                <% for (int i = 1; i <= 12; i++) { 
-                                    String monthValue = (i < 10 ? "0" : "") + i;
-                                %>
-                                    <option value="<%= monthValue %>" <%= monthValue.equals(request.getParameter("month")) ? "selected" : "" %>><%= monthValue %></option>
-                                <% } %>
-                            </select>
-                            <button type="submit">Filter</button>
-                        </form>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Check In Time</th>
-                                <th>Check Out Time</th>
-                                <th>Total Hours</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                            if (attendanceList == null) {
-                                attendanceList = empDao.getAttRecordById(eid);
-                            }
-                            for (Attendance attendance : attendanceList) {
-                                boolean highlightRow = (attendance.getCheckin() != null && attendance.getCheckout() == null) && 
-                                                      (LocalDate.now().isAfter(LocalDate.parse(attendance.getDate(), formatter)));
-                            %>
-                                <tr <%= highlightRow ? "style='background-color: #949494;'" : "" %>>
-                                    <td><%= attendance.getDate() %></td>
-                                    <td><%= attendance.getCheckin() %></td>
-                                    <td><%= attendance.getCheckout() %></td>
-                                    <td>
-                                        <%
-                                        if (attendance.getCheckin() != null && attendance.getCheckout() != null) {
-                                            try {
-                                                LocalTime st = LocalTime.parse(attendance.getCheckin());
-                                                LocalTime et = LocalTime.parse(attendance.getCheckout());
-                                                Duration difference = Duration.between(st, et);
-                                                long hours = difference.toHours();
-                                                long minutes = difference.toMinutes() % 60;
-                                                out.print(hours + "h : " + minutes + "m");
-                                            } catch (Exception ex) {
-                                                out.print("Invalid time format");
-                                            }
-                                        } else if (attendance.getCheckin() != null && attendance.getCheckout() == null && 
-                                                   LocalDate.now().isAfter(LocalDate.parse(attendance.getDate(), formatter))) {
-                                            out.print("Checkout is missing");
-                                            if (!attendance.isUpdateRequested()) {
-                                        %>
-                                            <br><button onclick="openPopup2('<%= attendance.getAttendId() %>', '<%= attendance.getDate() %>', '<%= attendance.getCheckin() %>', '<%= attendance.getCheckout() %>')">Request Update</button>
-                                        <%
-                                            }
-                                        } else {
-                                            out.print("-");
-                                        }
-                                        %>
-                                    </td>
-                                    <td>
-                                    <% 	if(attendance.getRemarks()==null) out.print("-");
-                                    	else out.print(attendance.getRemarks());
-                                    %>
-                                    </td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+	<%
+	String msg = (String) request.getAttribute("msg");
+	HttpSession ses = request.getSession();
+	Employees emp = (Employees) ses.getAttribute("employee");
+	int eid = emp.getEmpId();
+	EmpDao empDao = new EmpDao(DBConnect.getConnection());
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	List<Attendance> attendanceList = (List<Attendance>) request.getAttribute("filteredAttendance");
+	String empName = emp.getFname() + " " + emp.getLname();
+	%>
 
-                    <!-- Attendance Update Popup -->
-                    <div id="myPopup2" class="popup">
-    <span class="close-btn" onclick="closePopup('myPopup2')">&times;</span>
-    <h2>Update Attendance</h2>
-    <form action="requestUpdate" method="get" class="PopupForm">
-    	<label for="attenId"></label> 
-       <input type="hidden" id="attenId" name="attenId">
-        <input type="hidden" name="empName" value="<%= empName %>">
-        <label for="date">Date:</label>
-        <input type="text" id="date" name="date" readonly>
-        <label for="cit">Check In Time:</label>
-        <input type="text" id="cit" name="cit">
-        <label for="cot">Check Out Time:</label>
-        <input type="text" id="cot" name="cot">
-        <input type="submit" value="Request Update">
-    </form>
-</div>
+	<div class="container">
+		<div class="content">
+			<div class="sidebar">
+				<div class="tools">
+					<h3>Attendance</h3>
+					<div class="button-container">
+						<form action="insertLogin" method="post">
+							<input type="submit" value="Log In" name="login">
+						</form>
+						<form action="updateLogout" method="post">
+							<input type="submit" value="Log Out" name="logout">
+						</form>
+					</div>
+					<%
+					if (msg != null) {
+					%>
+					<p><%=msg%></p>
+					<%
+					}
+					%>
+				</div>
+			</div>
+			<div class="main-content">
+				<div class="form-container">
+					<h2>Attendance List</h2>
+					<div class="filter">
+						<form action="filterAttendance" method="get">
+							<input type="hidden" name="id" value="<%=eid%>"> <input
+								type="hidden" name="origin" value="attendance"> <label
+								for="year">Year:</label> <input type="text" id="year"
+								name="year" onkeyup="toggleMonthDropdown()"
+								value="<%=request.getParameter("year") != null ? request.getParameter("year") : ""%>">
+							<label for="month">Month:</label> <select id="month" name="month">
+								<option value=""
+									<%="".equals(request.getParameter("month")) ? "selected" : ""%>>Select
+									Month</option>
+								<%
+								for (int i = 1; i <= 12; i++) {
+									String monthValue = (i < 10 ? "0" : "") + i;
+								%>
+								<option value="<%=monthValue%>"
+									<%=monthValue.equals(request.getParameter("month")) ? "selected" : ""%>><%=monthValue%></option>
+								<%
+								}
+								%>
+							</select>
+							<button type="submit">Filter</button>
+						</form>
+					</div>
+					<table>
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Check In Time</th>
+								<th>Check Out Time</th>
+								<th>Total Hours</th>
+								<th>Remarks</th>
+								<th>Request Update</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+							if (attendanceList == null) {
+								attendanceList = empDao.getAttRecordById(eid);
+							}
+							for (Attendance attendance : attendanceList) {
+								boolean highlightRow = (attendance.getCheckin() != null && attendance.getCheckout() == null)
+								&& (LocalDate.now().isAfter(LocalDate.parse(attendance.getDate(), formatter)));
+							%>
+							<tr <%=highlightRow ? "style='background-color: #949494;'" : ""%>>
+								<td><%=attendance.getDate()%></td>
+								<td><%=attendance.getCheckin()%></td>
+								<td><%=attendance.getCheckout()%></td>
+								<td>
+									<%
+									if (attendance.getCheckin() != null && attendance.getCheckout() != null) {
+										try {
+											LocalTime st = LocalTime.parse(attendance.getCheckin());
+											LocalTime et = LocalTime.parse(attendance.getCheckout());
+											Duration difference = Duration.between(st, et);
+											long hours = difference.toHours();
+											long minutes = difference.toMinutes() % 60;
+											out.print(hours + "h : " + minutes + "m");
+										} catch (Exception ex) {
+											out.print("Invalid time format");
+										}
+									} else if (attendance.getCheckin() != null && attendance.getCheckout() == null
+											&& LocalDate.now().isAfter(LocalDate.parse(attendance.getDate(), formatter))) {
+										out.print("Checkout is missing");
+									} else {
+										out.print("-");
+									}
+									%>
+								</td>
+								<td>
+									<%
+									if (attendance.getRemarks() == null)
+										out.print("-");
+									else
+										out.print(attendance.getRemarks());
+									%>
+								</td>
 
-                    <!-- General Notification Popup -->
-                    <div id="myPopup" class="popup">
-                        <span class="close-btn" onclick="closePopup('myPopup')">&times;</span>
-                        <h2>Warning!</h2>
-                        <form action="insertYES" method="post">
-                            <input type="hidden" name="eid" value="<%= eid %>">
-                            <input type="hidden" name="leaveid" id="leaveid">
-                            <div class="warning">
-                                <h5>Today it's not a working day (Holiday!)</h5>
-                            </div>
-                            <div class="msg">Are you sure you want to login?</div>
-                            <div>
-                                <input type="submit" value="Proceed to login" name="yes">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+								<td>
+									<%
+									if (attendance.isButtonClicked()==0) {
+									%>
+									<button
+										onclick="openPopup2('<%=attendance.getAttendId()%>', '<%=attendance.getDate()%>', '<%=attendance.getCheckin()%>', '<%=attendance.getCheckout()%>')">Request Update</button> 
+										<% } else {
+											 out.print("-");
+										 }
+										 %>
+
+								</td>
+							</tr>
+							<%
+							}
+							%>
+						</tbody>
+					</table>
+
+					<!-- Attendance Update Popup -->
+					<div id="myPopup2" class="popup">
+						<span class="close-btn" onclick="closePopup('myPopup2')">&times;</span>
+						<h2>Update Attendance</h2>
+						<form action="requestUpdate" method="get" class="PopupForm">
+							<label for="attenId"></label> <input type="hidden" id="attenId"
+								name="attenId"> <input type="hidden" name="empName"
+								value="<%=empName%>"> <label for="date">Date:</label> <input
+								type="text" id="date" name="date" readonly> <label
+								for="cit">Check In Time:</label> <input type="text" id="cit"
+								name="cit"> <label for="cot">Check Out Time:</label> <input
+								type="text" id="cot" name="cot"> <input type="submit"
+								value="Request Update">
+						</form>
+					</div>
+
+					<!-- General Notification Popup -->
+					<div id="myPopup" class="popup">
+						<span class="close-btn" onclick="closePopup('myPopup')">&times;</span>
+						<h2>Warning!</h2>
+						<form action="insertYES" method="post">
+							<input type="hidden" name="eid" value="<%=eid%>"> <input
+								type="hidden" name="leaveid" id="leaveid">
+							<div class="warning">
+								<h5>Today it's not a working day (Holiday!)</h5>
+							</div>
+							<div class="msg">Are you sure you want to login?</div>
+							<div>
+								<input type="submit" value="Proceed to login" name="yes">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
 </html>

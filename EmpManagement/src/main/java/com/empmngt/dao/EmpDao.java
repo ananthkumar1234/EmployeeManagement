@@ -35,7 +35,7 @@ public class EmpDao {
 
 	public String validateLogin(String uname,String pwd)throws SQLException
 	{
-		String query = "SELECT u.EmployeeID, u.Password, e.RoleID, r.RoleName FROM User_credentials u JOIN Employees e ON u.EmployeeID = e.EmployeeID JOIN Roles r ON e.RoleID = r.RoleID WHERE binary u.Username = ?";
+		String query = "SELECT u.EmployeeID, u.Password, e.RoleID, r.RoleName FROM User_credentials u JOIN Employees e ON u.EmployeeID = e.EmployeeID JOIN Roles r ON e.RoleID = r.RoleID WHERE u.Username = ?";
 		PreparedStatement ps = con.prepareStatement(query);
 		ps.setString(1, uname);
 
@@ -343,15 +343,8 @@ public class EmpDao {
 		ps.setString(2, str[0]);
 		ps.setString(3, str[1]);
 
+
 		int i = ps.executeUpdate();
-		//	    	if(i>0)
-		//	    	{
-		//	    		return "Logged in successfully"+str[1];
-		//	    	}else
-		//	    	{
-		//	    		System.out.println();
-		//	    	}
-		//	    	return "error";
 	}
 
 
@@ -383,12 +376,11 @@ public class EmpDao {
 
 	public List<Attendance> getAttRecordById(int eid) throws SQLException {
 	    List<Attendance> list = new ArrayList<>();
-	    String qry = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
-	               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
-	               + "FROM attendance a "
-	               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
-	               + "WHERE a.employeeID = ? AND MONTH(a.Date) = MONTH(CURRENT_DATE()) AND YEAR(a.Date) = YEAR(CURRENT_DATE()) "
-	               + "ORDER BY a.AttendanceID";
+	    String qry = "SELECT AttendanceId, Date, CheckInTime, CheckOutTime, Remarks, IsButtonClicked FROM attendance "
+	    		+"WHERE employeeID = ? " 
+	    		+"AND MONTH(Date) = MONTH(CURRENT_DATE()) "
+	    		+"AND YEAR(Date) = YEAR(CURRENT_DATE()) "
+	    		+"ORDER BY AttendanceId";
 	    PreparedStatement ps = con.prepareStatement(qry);
 	    ps.setInt(1, eid);
 	    ResultSet rs = ps.executeQuery();
@@ -400,11 +392,12 @@ public class EmpDao {
 	        a.setCheckin(rs.getString("CheckInTime"));
 	        a.setCheckout(rs.getString("CheckOutTime"));
 	        a.setRemarks(rs.getString("Remarks"));
-	        a.setUpdateRequested(rs.getInt("UpdateRequested") == 1);
+	        a.setButtonClicked(rs.getInt("IsButtonClicked"));
 	        list.add(a);
 	    }
 	    return list;
 	}
+
 
 
 
@@ -586,16 +579,23 @@ public class EmpDao {
 	public List<Attendance> getAttendanceByYear(int eid, String year) {
 		List<Attendance> list = new ArrayList<>();
 		try {
-			String query = "SELECT * FROM attendance WHERE employeeid = ? AND YEAR(date) = ?";
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+		               + "FROM attendance a "
+		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+		               + "WHERE a.employeeid = ? AND YEAR(a.date) = ? "
+		               + "ORDER BY a.AttendanceID";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, year);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Attendance att = new Attendance();
+				att.setAttendId(rs.getInt("AttendanceId"));
 				att.setDate(rs.getString("date"));
 				att.setCheckin(rs.getString("checkintime"));
 				att.setCheckout(rs.getString("checkouttime"));
+				att.setRemarks(rs.getString("Remarks"));
 				list.add(att);
 			}
 		} catch (Exception e) {
@@ -607,7 +607,12 @@ public class EmpDao {
 	public List<Attendance> getAttendanceByYearMonth(int eid, String year, String month) {
 		List<Attendance> list = new ArrayList<>();
 		try {
-			String query = "SELECT * FROM attendance WHERE employeeid = ? AND YEAR(date) = ? AND MONTH(date) = ?";
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+		               + "FROM attendance a "
+		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+		               + "WHERE a.employeeid = ? AND YEAR(a.date) = ? AND MONTH(a.date) = ? "
+		               + "ORDER BY a.AttendanceID";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, year);
@@ -615,9 +620,11 @@ public class EmpDao {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Attendance att = new Attendance();
+				att.setAttendId(rs.getInt("AttendanceID"));
 				att.setDate(rs.getString("date"));
 				att.setCheckin(rs.getString("checkintime"));
 				att.setCheckout(rs.getString("checkouttime"));
+				att.setRemarks(rs.getString("Remarks"));
 				list.add(att);
 			}
 		} catch (Exception e) {
@@ -629,7 +636,12 @@ public class EmpDao {
 	public List<Attendance> getAttendanceByDateRange(int eid, String fromDate, String toDate) {
 		List<Attendance> list = new ArrayList<>();
 		try {
-			String query = "SELECT * FROM attendance WHERE employeeid = ? AND date BETWEEN ? AND ?";
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+		               + "FROM attendance a "
+		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+		               + "WHERE a.employeeid = ? AND a.date BETWEEN ? AND ? "
+		               + "ORDER BY a.AttendanceID";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, fromDate);
@@ -637,9 +649,11 @@ public class EmpDao {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Attendance att = new Attendance();
+				att.setAttendId(rs.getInt("AttendanceId"));
 				att.setDate(rs.getString("date"));
 				att.setCheckin(rs.getString("checkintime"));
 				att.setCheckout(rs.getString("checkouttime"));
+				att.setRemarks(rs.getString("Remarks"));
 				list.add(att);
 			}
 		} catch (Exception e) {
@@ -1035,7 +1049,7 @@ public class EmpDao {
 	{
 		List<AddHoliday> list = new ArrayList<>();
 		try {
-			String query = "SELECT * FROM holidays WHERE Year(holidayDate) = Year(CURRENT_DATE())";
+			String query = "SELECT * FROM holidays WHERE Year(holidayDate) = Year(CURRENT_DATE()) order by HolidayDate";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
@@ -1174,58 +1188,6 @@ public class EmpDao {
 		return list;
 	}
 	
-	
-	public boolean validateEmail(String uname,String email) throws SQLException
-	{
-		String qry="select email from employees where employeeid =(select employeeid from user_credentials where username=?)";
-		PreparedStatement ps = con.prepareStatement(qry);
-		ps.setString(1, uname);
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		if(email.equals(rs.getString("email")))
-		{
-//			System.out.println("true in validatemethod");
-			return true;
-		
-		}
-		return false;
-	}
-	
-	
-	public boolean changePassword(String pwd,String uname) throws SQLException
-	{
-		String qry="update user_credentials set password=? where username=?";
-		PreparedStatement ps = con.prepareStatement(qry);
-		ps.setString(1, pwd);
-		ps.setString(2, uname);
-		int i = ps.executeUpdate();
-		if(i>0)
-		{
-			return true;
-		}
-		return false;
-	}
-	
-	
-	
-	public String UpdateAttendanceTable(int AID,String name,String Date, String CITime, String COTime, int eid) throws SQLException
-	{
-		String qry="Insert into AttendanceUpdate (AttendanceId,Name,Date, CheckInTime, CheckOutTime, EmployeeId) values (?,?,?,?,?,?)";
-		PreparedStatement ps = con.prepareStatement(qry);
-		ps.setInt(1,AID);
-		ps.setString(2,name);
-		ps.setString(3,Date);
-		ps.setString(4,CITime);
-		ps.setString(5,COTime);
-		ps.setInt(6,eid);
-		int i=ps.executeUpdate();
-		if(i>0) return "Request Sent";
-		return "Request Failed";
-		
-	}
-	
-	
-	
 	public String UpdateAttendance(int AID,String Date, String CITime, String COTime) throws SQLException
 	{
 		String qry="Update Attendance SET Date=?,CheckInTime=?, CheckOutTime=? where AttendanceId=?";
@@ -1247,11 +1209,34 @@ public class EmpDao {
 		
 	}
 	
+	public String UpdateAttendanceTable(int AID,String name,String Date, String CITime, String COTime, int eid) throws SQLException
+	{
+		String qry="Insert into AttendanceUpdate (AttendanceId,Name,Date, CheckInTime, CheckOutTime, EmployeeId) values (?,?,?,?,?,?)";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1,AID);
+		ps.setString(2,name);
+		ps.setString(3,Date);
+		ps.setString(4,CITime);
+		ps.setString(5,COTime);
+		ps.setInt(6,eid);
+		int i=ps.executeUpdate();
+		
+		String qry2="Update Attendance set IsButtonClicked=1 where AttendanceId=?";
+		PreparedStatement ps2 = con.prepareStatement(qry2);
+		ps2.setInt(1, AID);
+		ps2.executeUpdate();
+		
+		if(i>0) return "Request Sent";
+		return "Request Failed";
+		
+		
+	}
+	
 	public List<Attendance> ManagerAttendance(int mid) throws SQLException
 	{
 		List<Attendance> list = new ArrayList<>();
 		String qry="SELECT au.AttendanceId, au.Name, au.Date, au.CheckInTime as NewCheckInTime, au.CheckOutTime as NewCheckOutTime, att.CheckInTime as OldCheckInTime, att.CheckOutTime as OldCheckOutTime FROM AttendanceUpdate au JOIN Attendance att ON att.AttendanceId = au.AttendanceId WHERE au.EmployeeId IN (SELECT employee FROM Manager WHERE manager = ?)";
-		
+		 
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, mid);
 		ResultSet rs = ps.executeQuery();
@@ -1270,8 +1255,6 @@ public class EmpDao {
 		
 		return list;
 	}
-	
-	
 	
 	public List<Attendance> HRAttendance() throws SQLException
 	{
@@ -1296,9 +1279,35 @@ public class EmpDao {
 		return list;
 	}
 	
+	public boolean validateEmail(String uname,String email) throws SQLException
+	{
+		String qry="select email from employees where employeeid =(select employeeid from user_credentials where username=?)";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setString(1, uname);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		if(email.equals(rs.getString("email")))
+		{
+//			System.out.println("true in validatemethod");
+			return true;
+		
+		}
+		return false;
+	}
 	
-
-
+	
+	public boolean changePassword(String pwd, String uname) throws SQLException {
+	    String qry = "update user_credentials set password=? where username=?";
+	    PreparedStatement ps = con.prepareStatement(qry);
+	    ps.setString(1, pwd);
+	    ps.setString(2, uname);
+	    int i = ps.executeUpdate();
+	    if (i > 0) {
+	        return true;
+	    }
+	    return false;
+	}
+ 
 }
 
 
