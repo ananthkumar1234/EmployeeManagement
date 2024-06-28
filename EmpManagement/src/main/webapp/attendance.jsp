@@ -360,20 +360,22 @@ if (f != null && f) {%>
 								for="year">Year:</label> <input type="text" id="year"
 								name="year" onkeyup="toggleMonthDropdown()"
 								value="<%=request.getParameter("year") != null ? request.getParameter("year") : ""%>">
-							<label for="month">Month:</label> <select id="month" name="month">
-								<option value=""
-									<%="".equals(request.getParameter("month")) ? "selected" : ""%>>Select
-									Month</option>
-								<%
-								for (int i = 1; i <= 12; i++) {
-									String monthValue = (i < 10 ? "0" : "") + i;
-								%>
-								<option value="<%=monthValue%>"
-									<%=monthValue.equals(request.getParameter("month")) ? "selected" : ""%>><%=monthValue%></option>
-								<%
-								}
-								%>
-							</select>
+							<label for="month">Month:</label> 
+							<select id="month" name="month">
+                            <option value="" <%= "".equals(request.getParameter("month")) ? "selected" : "" %>>Select Month</option>
+                            <option value="01" <%= "01".equals(request.getParameter("month")) ? "selected" : "" %>>January</option>
+                            <option value="02" <%= "02".equals(request.getParameter("month")) ? "selected" : "" %>>February</option>
+                            <option value="03" <%= "03".equals(request.getParameter("month")) ? "selected" : "" %>>March</option>
+                            <option value="04" <%= "04".equals(request.getParameter("month")) ? "selected" : "" %>>April</option>
+                            <option value="05" <%= "05".equals(request.getParameter("month")) ? "selected" : "" %>>May</option>
+                            <option value="06" <%= "06".equals(request.getParameter("month")) ? "selected" : "" %>>June</option>
+                            <option value="07" <%= "07".equals(request.getParameter("month")) ? "selected" : "" %>>July</option>
+                            <option value="08" <%= "08".equals(request.getParameter("month")) ? "selected" : "" %>>August</option>
+                            <option value="09" <%= "09".equals(request.getParameter("month")) ? "selected" : "" %>>September</option>
+                            <option value="10" <%= "10".equals(request.getParameter("month")) ? "selected" : "" %>>October</option>
+                            <option value="11" <%= "11".equals(request.getParameter("month")) ? "selected" : "" %>>November</option>
+                            <option value="12" <%= "12".equals(request.getParameter("month")) ? "selected" : "" %>>December</option>
+                        </select>
 							<button type="submit">Filter</button>
 						</form>
 					</div>
