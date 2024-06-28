@@ -147,6 +147,9 @@
     <%@include file="navbar.jsp" %>
 
     <div class="container">
+     <%if(request.getAttribute("msg")!=null) { %>
+    	<script>alert("<%= request.getAttribute("msg")%>") </script><%} %>
+
         <h2>Add Employee</h2>
         <form action="AddEmployeeServlet" method="post">
             <div class="form-row">

@@ -3,6 +3,8 @@ package com.empmngt.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -73,9 +75,22 @@ public class AddEmpServlet extends HttpServlet{
 		
 		try (Connection con = DBConnect.getConnection()) {
             EmpDao eDao = new EmpDao(con);
-            
+            String qry="Select username from user_credentials where BINARY username=?";
+            PreparedStatement ps=con.prepareStatement(qry);
+            ps.setString(1,uc.getUsername());
+            ResultSet rs=ps.executeQuery();
+            if(!rs.next())
+            {
             eDao.addEmp(e,uc);
             req.getRequestDispatcher("addEmp.jsp").forward(req, resp);
+            }
+            else
+            {
+            	req.setAttribute("msg", "Username Already exists");
+            	req.getRequestDispatcher("addEmp.jsp").forward(req, resp);
+            }
+  
+            
 		}catch(Exception e1)
 		{
 			e1.printStackTrace();
