@@ -435,7 +435,10 @@ if (f != null && f) {%>
 
 								<td>
 									<%
-									if (attendance.isButtonClicked()==0) {
+									if (attendance.isButtonClicked() == 0 && 
+								    !("Weekend".equals(attendance.getRemarks()) || 
+								      "Holiday".equals(attendance.getRemarks()) || 
+								      "Leave".equals(attendance.getRemarks()))) {
 									%>
 									<button
 										onclick="openPopup2('<%=attendance.getAttendId()%>', '<%=attendance.getDate()%>', '<%=attendance.getCheckin()%>', '<%=attendance.getCheckout()%>')">Request Update</button> 
