@@ -133,7 +133,7 @@
             }
 
             .dropdown-content {
-                min-width: 120px;
+                min-width: 100px;
             }
 
             .dropdown-content a {
