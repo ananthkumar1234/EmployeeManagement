@@ -223,12 +223,15 @@ tr:hover {
 <script>
   // Initialize Flatpickr after the DOM is loaded
   document.addEventListener("DOMContentLoaded", function() {
-    flatpickr("#fromDate");
+    flatpickr("#fromDate", {
+      minDate: "today",
+      dateFormat: "Y-m-d"
+    });
+    flatpickr("#toDate", {
+      minDate: "today",
+      dateFormat: "Y-m-d"
+    });
   });
-  
-  document.addEventListener("DOMContentLoaded", function() {
-	    flatpickr("#toDate");
-	  });
 </script>
 </head>
 <%@include file="navbar.jsp"%>
@@ -299,48 +302,33 @@ int n = er2.availDays(eid2);
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
+      <script>
         document.addEventListener("DOMContentLoaded", function() {
-            flatpickr("#fromDate");
-            flatpickr("#toDate");
+            const today = new Date().toISOString().split('T')[0];
+            const fromDateInput = document.getElementById("fromDate");
+            const toDateInput = document.getElementById("toDate");
+
+            fromDateInput.setAttribute("min", today);
+            toDateInput.setAttribute("min", today);
 
             document.getElementById("leaveForm").addEventListener("submit", function(event) {
                 let isValid = true;
 
-                const fromDate = document.getElementById("fromDate");
-                const fromDateError = document.getElementById("fromDateError");
-                if (!fromDate.value) {
-                    fromDateError.style.display = "inline";
-                    isValid = false;
-                } else {
-                    fromDateError.style.display = "none";
-                }
+                const fromDate = fromDateInput.value;
+                const toDate = toDateInput.value;
+                const leaveType = document.getElementById("leaveType").value;
+                const reason = document.getElementById("reason").value;
 
-                const toDate = document.getElementById("toDate");
-                const toDateError = document.getElementById("toDateError");
-                if (!toDate.value) {
-                    toDateError.style.display = "inline";
-                    isValid = false;
-                } else {
-                    toDateError.style.display = "none";
-                }
+                const errors = {
+                    fromDateError: !fromDate,
+                    toDateError: !toDate,
+                    leaveTypeError: !leaveType,
+                    reasonError: !reason
+                };
 
-                const leaveType = document.getElementById("leaveType");
-                const leaveTypeError = document.getElementById("leaveTypeError");
-                if (!leaveType.value) {
-                    leaveTypeError.style.display = "inline";
-                    isValid = false;
-                } else {
-                    leaveTypeError.style.display = "none";
-                }
-
-                const reason = document.getElementById("reason");
-                const reasonError = document.getElementById("reasonError");
-                if (!reason.value) {
-                    reasonError.style.display = "inline";
-                    isValid = false;
-                } else {
-                    reasonError.style.display = "none";
+                for (const error in errors) {
+                    document.getElementById(error).style.display = errors[error] ? 'inline' : 'none';
+                    isValid = isValid && !errors[error];
                 }
 
                 if (!isValid) {

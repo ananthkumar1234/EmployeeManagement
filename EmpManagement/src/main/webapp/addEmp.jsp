@@ -149,8 +149,16 @@
     <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            flatpickr("#dob");
-            flatpickr("#hireDate");
+            flatpickr("#hireDate", {
+                dateFormat: "Y-m-d",
+                maxDate: "today", // Restricts future dates
+                defaultDate: "today", // Optionally sets default date to today
+            });
+            flatpickr("#dob", {
+                dateFormat: "Y-m-d",
+                maxDate: "today", // Restricts future dates
+                defaultDate: "today", // Optionally sets default date to today
+            });
         });
     </script>
 </head>

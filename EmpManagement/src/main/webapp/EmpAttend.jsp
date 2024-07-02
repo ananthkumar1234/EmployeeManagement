@@ -181,12 +181,17 @@ tr:hover {
     <script>
   // Initialize Flatpickr after the DOM is loaded
   document.addEventListener("DOMContentLoaded", function() {
-    flatpickr("#fromDate");
-  });
-  
-  document.addEventListener("DOMContentLoaded", function() {
-	    flatpickr("#toDate");
-	  });
+            flatpickr("#fromDate", {
+                dateFormat: "Y-m-d",
+                maxDate: "today", // Restricts future dates
+                defaultDate: "today", // Optionally sets default date to today
+            });
+            flatpickr("#toDate", {
+                dateFormat: "Y-m-d",
+                maxDate: "today", // Restricts future dates
+                defaultDate: "today", // Optionally sets default date to today
+            });
+        });
 </script>
 
 <script>

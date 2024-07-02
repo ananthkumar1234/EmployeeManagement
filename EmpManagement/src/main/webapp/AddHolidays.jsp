@@ -207,7 +207,10 @@ button[type="submit"]:hover {
 							.addEventListener(
 									"DOMContentLoaded",
 									function() {
-										flatpickr("#date");
+										 flatpickr("#date", {
+										      minDate: "today",
+										      dateFormat: "Y-m-d"
+										    });
 
 										document
 												.getElementById("holidayForm")
