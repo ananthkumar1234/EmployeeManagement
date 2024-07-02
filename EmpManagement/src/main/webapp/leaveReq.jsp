@@ -199,6 +199,19 @@ tr:hover {
 	padding: 20px;
 }
 </style>
+<link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
+<script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+
+<script>
+  // Initialize Flatpickr after the DOM is loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#fromDate");
+  });
+  
+  document.addEventListener("DOMContentLoaded", function() {
+	    flatpickr("#toDate");
+	  });
+</script>
 </head>
 <body>
 <%@include file="navbar.jsp"%>
@@ -226,11 +239,11 @@ int n = er2.availDays(eid2);
             <div class="form-row">
                 <div class="form-group">
                     <label for="fromDate">From Date:</label>
-                    <input type="date" id="fromDate" name="fromDate" required>
+                    <input type="text" id="fromDate" name="fromDate" required>
                 </div>
                 <div class="form-group">
                     <label for="toDate">To Date:</label>
-                    <input type="date" id="toDate" name="toDate" required>
+                    <input type="text" id="toDate" name="toDate" required>
                 </div>
                 <div class="form-group">
                     <label for="leaveType">Leave Type:</label>
