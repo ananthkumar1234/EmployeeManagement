@@ -1,3 +1,6 @@
+<%@ page import="com.empmngt.dao.EmpDao" %>
+<%@ page import="com.empmngt.jdbc.DBConnect" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,7 +37,7 @@ body {
 .navbar .header h1 {
     margin: 0;
     font-size: 24px;
-    margin-left:15px;
+    margin-left: 15px;
 }
 
 .navbar .nav-links {
@@ -52,6 +55,7 @@ body {
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
     height: 60px;
+    position: relative; /* Add this line */
 }
 
 .navbar a:hover,
@@ -127,9 +131,9 @@ body {
     padding: 2px 6px;
     font-size: 0.75em;
     position: absolute;
-    top: 10px;
-    right: 0;
-    transform: translateX(50%);
+    top: 40px;
+    right: 6px;
+    transform: translate(50%, -50%);
 }
 
 @media (max-width: 768px) {
@@ -157,10 +161,14 @@ body {
     }
 }
 
-
     </style>
 </head>
 <body>
+
+    <%
+        EmpDao empDao = new EmpDao(DBConnect.getConnection());
+        int pendingLeavesCount = empDao.getPendingLeavesCount();
+    %>
     <div class="navbar-container">
         <div class="navbar">
             <div class="header">
@@ -177,7 +185,7 @@ body {
                 <a href="AddHolidays.jsp" class="nav-link">Add Holidays</a>
                 <% } %>
                 <% if (role.equals("HR") || role.equals("Manager")) { %>
-                <a href="Leaves.jsp" class="nav-link">Leave Requests</a>
+                <a href="Leaves.jsp" class="nav-link leave-requests">Leave Requests <span class="count" style="display: none;"></span></a>
                 <% } %>
                 <a href="attendance.jsp" class="nav-link">Attendance</a>
                 <% if (!role.equals("HR")) { %>
@@ -209,6 +217,8 @@ body {
             var links = document.querySelectorAll('.nav-link');
             var logoutButton = document.querySelector('.logout-btn');
             var homePageLink = "HRhome.jsp";
+            var leaveRequestCount = <%= pendingLeavesCount %>;
+            var leaveRequestsLink = document.querySelector('.leave-requests .count');
 
             function setActiveLink() {
                 var activeLink = localStorage.getItem('activeLink');
@@ -238,6 +248,18 @@ body {
                     localStorage.setItem('activeLink', homePageLink);
                 });
             }
+            
+            function updateLeaveRequestBadge(count) {
+                if (count > 0) {
+                    leaveRequestsLink.textContent = count;
+                    leaveRequestsLink.style.display = 'inline';
+                } else {
+                    leaveRequestsLink.style.display = 'none';
+                }
+            }
+
+            // Call the function to update the badge based on the count
+            updateLeaveRequestBadge(leaveRequestCount);
         });
     </script>
 </body>
