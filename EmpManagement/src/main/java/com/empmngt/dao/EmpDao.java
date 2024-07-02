@@ -380,7 +380,7 @@ public class EmpDao {
 	    		+"WHERE employeeID = ? " 
 	    		+"AND MONTH(Date) = MONTH(CURRENT_DATE()) "
 	    		+"AND YEAR(Date) = YEAR(CURRENT_DATE()) "
-	    		+"ORDER BY AttendanceId";
+	    		+"ORDER by date";
 	    PreparedStatement ps = con.prepareStatement(qry);
 	    ps.setInt(1, eid);
 	    ResultSet rs = ps.executeQuery();
@@ -584,7 +584,7 @@ public class EmpDao {
 		               + "FROM attendance a "
 		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
 		               + "WHERE a.employeeid = ? AND YEAR(a.date) = ? "
-		               + "ORDER BY a.AttendanceID";
+		               + "ORDER BY a.date";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, year);
@@ -612,7 +612,7 @@ public class EmpDao {
 		               + "FROM attendance a "
 		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
 		               + "WHERE a.employeeid = ? AND YEAR(a.date) = ? AND MONTH(a.date) = ? "
-		               + "ORDER BY a.AttendanceID";
+		               + "ORDER BY a.date";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, year);
@@ -641,7 +641,7 @@ public class EmpDao {
 		               + "FROM attendance a "
 		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
 		               + "WHERE a.employeeid = ? AND a.date BETWEEN ? AND ? "
-		               + "ORDER BY a.AttendanceID";
+		               + "ORDER BY a.date";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, fromDate);
