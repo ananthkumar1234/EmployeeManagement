@@ -3,190 +3,202 @@
 <head>
     <title>Navbar</title>
     <style>
-        *
-        {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            width: 100%;
-            font-family: Arial, sans-serif;
-        }
+body {
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            background-color: #333;
-            padding: 10px 20px;
-        }
+.navbar-container {
+    width: 100%;
+    background-color: #333;
+}
 
-        .navbar .header {
-            color: orange;
-            flex-grow: 1;
-        }
+.navbar {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+    height: 60px;
+}
 
-        .navbar .header h1 {
-            margin: 0;
-        }
+.navbar .header {
+    color: orange;
+}
 
-        .navbar .nav-links {
-            display: flex;
-            align-items: center;
-        }
+.navbar .header h1 {
+    margin: 0;
+    font-size: 24px;
+    margin-left:15px;
+}
 
-        .navbar a {
-            display: inline-block;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            text-decoration: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+.navbar .nav-links {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Add this line */
+}
 
-        .navbar a:hover, .navbar a:focus, .navbar a:active, .navbar a.active {
-            background-color: #ff9800;
-            color: white;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-        }
+.navbar a {
+    display: inline-flex;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 0 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    height: 60px;
+}
 
-        .navbar a.logout {
-            background-color: #333;
-        }
+.navbar a:hover,
+.navbar a:focus,
+.navbar a:active,
+.navbar a.active {
+    background-color: #ff9800;
+    color: white;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
 
-        .navbar a.logout:hover {
-            background-color: #ff6347;
-        }
+.navbar a.logout {
+    background-color: #333;
+}
 
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+.navbar a.logout:hover {
+    background-color: #ff6347;
+}
 
-        .dropdown .dropbtn {
-            cursor: pointer;
-            font-size: 16px;
-            border: none;
-            outline: none;
-            color: white;
-            background-color: inherit;
-        }
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
 
-        .dropdown .dropbtn img {
-            width: 40px;
-            height: auto;
-        }
+.dropdown .dropbtn {
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: inherit;
+    height: 60px;
+    padding: 0 10px;
+}
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            right: 0;
-        }
+.dropdown .dropbtn img {
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+}
 
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 0;  /* Position the dropdown menu to the right */
+}
 
-        .dropdown-content a:hover {
-            background-color: #ff9800;
-            color: white;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-        }
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    height: auto;
+}
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
+.dropdown-content a:hover {
+    background-color: #ff9800;
+    color: white;
+}
 
-        .count {
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-            padding: 4px 8px;
-            font-size: 0.8em;
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 
-        @media (max-width: 768px) {
-            .navbar a, .dropdown .dropbtn {
-                padding: 8px 5px;
-                font-size: 14px;
-            }
+.count {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.75em;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    transform: translateX(50%);
+}
 
-            .header h1 {
-                font-size: 18px;
-            }
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 10px;
+    }
 
-            .dropdown .dropbtn img {
-                width: 30px;
-            }
+    .navbar a,
+    .dropdown .dropbtn {
+        padding: 0 5px;
+        font-size: 14px;
+    }
 
-            .dropdown-content {
-                min-width: 100px;
-            }
+    .navbar .header h1 {
+        font-size: 18px;
+    }
 
-            .dropdown-content a {
-                padding: 10px 12px;
-            }
-        }
+    .dropdown .dropbtn img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .dropdown-content {
+        min-width: 120px;
+    }
+}
+
+
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="header">
-            <h1>Emvee Technologies</h1>
-        </div>
+    <div class="navbar-container">
+        <div class="navbar">
+            <div class="header">
+                <h1>Emvee Technologies</h1>
+            </div>
 
-        <div class="nav-links">
-            <a href="HRhome.jsp" class="nav-link">Home</a>
-            <a href="leaveReq.jsp" class="nav-link">Leaves</a>
-            <% HttpSession se = request.getSession(); Object role = se.getAttribute("role"); %>
-            <% if (role.equals("HR")) { %>
-            <a href="addEmp.jsp" class="nav-link">Add Employee</a>
-            <a href="empDetails.jsp" class="nav-link">Employees</a>
-            <a href="AddHolidays.jsp" class="nav-link">Add Holidays</a>
-            <% } %>
-            
-            <% if (role.equals("HR") || role.equals("Manager")) { %>
-            <a href="Leaves.jsp" class="nav-link">Leave Requests<% Integer count = (Integer) session.getAttribute("count"); if (count != null && count > 0) { %>
-            <span class="count"><%= count %></span>
-            <% } %>
-            </a>
-            <% } %>
-            
-            <a href="attendance.jsp" class="nav-link">Attendance</a>
+            <div class="nav-links">
+                <a href="HRhome.jsp" class="nav-link">Home</a>
+                <a href="leaveReq.jsp" class="nav-link">Leaves</a>
+                <% HttpSession se = request.getSession(); Object role = se.getAttribute("role"); %>
+                <% if (role.equals("HR")) { %>
+                <a href="addEmp.jsp" class="nav-link">Add Employee</a>
+                <a href="empDetails.jsp" class="nav-link">Employees</a>
+                <a href="AddHolidays.jsp" class="nav-link">Add Holidays</a>
+                <% } %>
+                <% if (role.equals("HR") || role.equals("Manager")) { %>
+                <a href="Leaves.jsp" class="nav-link">Leave Requests</a>
+                <% } %>
+                <a href="attendance.jsp" class="nav-link">Attendance</a>
+                <% if (!role.equals("HR")) { %>
+                <a href="ViewHolidays.jsp" class="nav-link">Holidays</a>
+                <% } %>
+                <% if (role.equals("Manager")) { %>
+                <a href="Reportees.jsp" class="nav-link">Reportees</a>
+                <% } %>
+                <% if (role.equals("HR") || role.equals("Manager")) { %>
+                <a href="AttendanceUpdateRequest.jsp" class="nav-link">Attendance Update</a>
+                <% } %>
 
-            <% if (!role.equals("HR")) { %>
-            <a href="ViewHolidays.jsp" class="nav-link">Holidays</a>
-            <% } %>
-            
-            <% if (role.equals("Manager")) { %>
-            <a href="Reportees.jsp" class="nav-link">Reportees</a>
-            <% } %>
-            
-            <% if (role.equals("HR") || role.equals("Manager")) { %>
-            <a href="AttendanceUpdateRequest.jsp" class="nav-link">Attendance Update</a>
-            <% } %>
-
-            <div class="dropdown">
-                <button class="dropbtn">
-                    <img alt="Avatar" src="Images/avatar2.png">
-                </button>
-                <div class="dropdown-content">
-                    <a href="profile.jsp">Profile</a>
-                    <a href="change_password.jsp">Change Password</a>
-                    <a href="LogoutServlet" class="logout-btn">Logout</a>
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <img alt="Avatar" src="Images/avatar2.png">
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="profile.jsp">Profile</a>
+                        <a href="change_password.jsp">Change Password</a>
+                        <a href="LogoutServlet" class="logout-btn">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>

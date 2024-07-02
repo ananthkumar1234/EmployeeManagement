@@ -23,12 +23,12 @@
         }
 
         .container {
-        max-width:100%;
-    	margin: 40px;
-    	padding: 20px;
-    	background-color: rgba(255, 255, 255, 0.8);
-    	border-radius: 8px;
-    	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width:100%;
+            margin: 40px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
@@ -51,21 +51,20 @@
 
         .form-group {
             display: flex;
-            margin-bottom: 15px;
+            flex-direction: column;
+            margin-bottom: 25px;
         }
 
         .form-group label {
-            width: 30%;
-            margin-right: 10px;
             font-weight: bold;
             display: flex;
             align-items: center;
+            margin-bottom: 5px;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-            width: 70%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -108,7 +107,6 @@
             text-align: center;
         }
 
-        /* Add specific styles for improved consistency */
         .form-section {
             background: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -135,19 +133,26 @@
             background-color: #218838;
         }
 
+        .star {
+            color: red;
+            font-size: 20px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+            margin-top: 5px;
+        }
     </style>
     <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
-<script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
     <script>
-  // Initialize Flatpickr after the DOM is loaded
-  document.addEventListener("DOMContentLoaded", function() {
-    flatpickr("#dob");
-  });
-  
-  document.addEventListener("DOMContentLoaded", function() {
-	    flatpickr("#hireDate");
-	  });
-</script>
+        document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("#dob");
+            flatpickr("#hireDate");
+        });
+    </script>
 </head>
 <body>
     <% 
@@ -159,47 +164,53 @@
     <%@include file="navbar.jsp" %>
 
     <div class="container">
-     <%if(request.getAttribute("msg")!=null) { %>
-    	<script>alert("<%= request.getAttribute("msg")%>") </script><%} %>
+        <% if(request.getAttribute("msg") != null) { %>
+            <script>alert("<%= request.getAttribute("msg") %>");</script>
+        <% } %>
 
         <h2>Add Employee</h2>
-        <form action="AddEmployeeServlet" method="post">
+        <form id="empForm" action="AddEmployeeServlet" method="post">
             <div class="form-row">
                 <div class="form-column">
                     <div class="form-section">
                         <h3>Personal Details</h3>
                         <div class="form-group">
-                            <label for="firstName">First Name:</label>
-                            <input type="text" id="firstName" name="firstName" required>
+                            <label for="firstName">First Name<span class="star">*</span></label>
+                            <input type="text" id="firstName" name="firstName">
+                            <span class="error-message" id="fNameError">Please enter FirstName.</span>
                         </div>
                         <div class="form-group">
-                            <label for="lastName">Last Name:</label>
-                            <input type="text" id="lastName" name="lastName" required>
+                            <label for="lastName">Last Name<span class="star">*</span></label>
+                            <input type="text" id="lastName" name="lastName">
+                            <span class="error-message" id="lNameError">Please enter LastName.</span>
                         </div>
                         <div class="form-group">
-                            <label for="dob">Date of Birth:</label>
-                            <input type="text" id="dob" name="dob" placeholder="yyyy-mm-dd" required>
+                            <label for="dob">Date of Birth<span class="star">*</span></label>
+                            <input type="text" id="dob" name="dob" placeholder="yyyy-mm-dd">
+                            <span class="error-message" id="dobError">Please select DateOfBirth.</span>
                         </div>
                         <div class="form-group">
-                            <label for="gender">Gender:</label>
-                            <select id="gender" name="gender" required>
+                            <label for="gender">Gender<span class="star">*</span></label>
+                            <select id="gender" name="gender">
                                 <option value="">Select Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Others">Others</option>
                             </select>
+                            <span class="error-message" id="genderError">Please select Gender.</span>
                         </div>
                         <div class="form-group">
-                            <label for="ms">Marital Status:</label>
-                            <select id="ms" name="ms" required>
+                            <label for="ms">Marital Status<span class="star">*</span></label>
+                            <select id="ms" name="ms">
                                 <option value="">Select Marital Status</option>
                                 <option value="Single">Single</option>
                                 <option value="Married">Married</option>
                             </select>
+                            <span class="error-message" id="msError">Please select MaritalStatus.</span>
                         </div>
                         <div class="form-group">
-                            <label for="bg">Blood Group:</label>
-                            <select id="bg" name="bg" required>
+                            <label for="bg">Blood Group<span class="star">*</span></label>
+                            <select id="bg" name="bg">
                                 <option value="">Select Blood Group</option>
                                 <option value="A Positive">A Positive</option>
                                 <option value="A Negative">A Negative</option>
@@ -210,78 +221,125 @@
                                 <option value="AB Positive">AB Positive</option>
                                 <option value="AB Negative">AB Negative</option>
                             </select>
+                            <span class="error-message" id="bgError">Please select BloodGroup.</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-column">
                     <div class="form-section">
                         <h3>Contact Details</h3>
                         <div class="form-group">
-                            <label for="phone">Personal Contact Number:</label>
-                            <input type="text" id="phone" name="phone" required>
+                            <label for="phone">Personal Contact Number<span class="star">*</span></label>
+                            <input type="text" id="phone" name="phone">
+                            <span class="error-message" id="phoneError">Please enter PhoneNumber.</span>
                         </div>
                         <div class="form-group">
-                            <label for="email">Personal Email:</label>
-                            <input type="email" id="email" name="email" required>
+                            <label for="email">Personal Email<span class="star">*</span></label>
+                            <input type="email" id="email" name="email">
+                            <span class="error-message" id="emailError">Please enter Valid Email.</span>
                         </div>
                         <div class="form-group">
-                            <label for="ecn">Emergency Contact Name:</label>
-                            <input type="text" id="ecn" name="ecn" required>
+                            <label for="ecn">Emergency Contact Name</label>
+                            <input type="text" id="ecn" name="ecn">
                         </div>
                         <div class="form-group">
-                            <label for="ec">Emergency Contact Number:</label>
-                            <input type="text" id="ec" name="ec" required>
+                            <label for="ec">Emergency Contact Number</label>
+                            <input type="text" id="ec" name="ec">
                         </div>
                         <div class="form-group">
-                            <label for="address">Permanent Address:</label>
-                            <textarea id="address" name="address" required></textarea>
+                            <label for="address">Permanent Address<span class="star">*</span></label>
+                            <textarea id="address" name="address"></textarea>
+                            <span class="error-message" id="addressError">Please enter Valid Address.</span>
                         </div>
                         <div class="form-group">
-                            <label for="tempadd">Temporary Address:</label>
-                            <input type="text" id="tempadd" name="tempadd" required>
+                            <label for="tempadd">Temporary Address</label>
+                            <input type="text" id="tempadd" name="tempadd">
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-row">
                 <div class="form-column">
                     <div class="form-section">
                         <h3>Employee Details</h3>
                         <div class="form-group">
-                            <label for="hireDate">Hire Date:</label>
-                            <input type="text" id="hireDate" name="hireDate" placeholder="yyyy-mm-dd" required>
+                            <label for="hireDate">Hire Date<span class="star">*</span></label>
+                            <input type="text" id="hireDate" name="hireDate" placeholder="yyyy-mm-dd">
+                            <span class="error-message" id="hireDateError">Please select hireDate.</span>
                         </div>
                         <div class="form-group">
-                            <label for="role">Role:</label>
-                            <select id="role" name="role" required>
+                            <label for="role">Role<span class="star">*</span></label>
+                            <select id="role" name="role">
                                 <option value="">Select Role</option>
                                 <% for(Roles r : list) { %>
                                     <option value="<%= r.getRoleId() %>"><%= r.getRoleName() %></option>
                                 <% } %>
                             </select>
+                            <span class="error-message" id="roleError">Please select Role.</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-column">
                     <div class="form-section">
                         <h3>Employee Credentials</h3>
                         <div class="form-group">
-                            <label for="username">Username:</label>
-                            <input type="text" id="username" name="username" required>
+                            <label for="username">Username<span class="star">*</span></label>
+                            <input type="text" id="username" name="username">
+                            <span class="error-message" id="unameError">Please enter userName.</span>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" required>
+                            <label for="password">Password<span class="star">*</span></label>
+                            <input type="password" id="password" name="password">
+                            <span class="error-message" id="pwdError">Please enter Password.</span>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <center><input type="submit" value="Save"></center> 
+
+            <center><input type="submit" value="Save"></center>
         </form>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("empForm").addEventListener("submit", function(event) {
+                    let isValid = true;
+
+                    const fields = [
+                        { id: "firstName", errorId: "fNameError", message: "Please enter FirstName." },
+                        { id: "lastName", errorId: "lNameError", message: "Please enter LastName." },
+                        { id: "dob", errorId: "dobError", message: "Please select DateOfBirth." },
+                        { id: "gender", errorId: "genderError", message: "Please select Gender." },
+                        { id: "ms", errorId: "msError", message: "Please select MaritalStatus." },
+                        { id: "bg", errorId: "bgError", message: "Please select BloodGroup." },
+                        { id: "phone", errorId: "phoneError", message: "Please enter PhoneNumber." },
+                        { id: "email", errorId: "emailError", message: "Please enter Valid Email." },
+                        { id: "address", errorId: "addressError", message: "Please enter Valid Address." },
+                        { id: "hireDate", errorId: "hireDateError", message: "Please select hireDate." },
+                        { id: "role", errorId: "roleError", message: "Please select Role." },
+                        { id: "username", errorId: "unameError", message: "Please enter userName." },
+                        { id: "password", errorId: "pwdError", message: "Please enter Password." }
+                    ];
+
+                    fields.forEach(function(field) {
+                        const input = document.getElementById(field.id);
+                        const error = document.getElementById(field.errorId);
+                        if (!input.value) {
+                            error.style.display = "block";
+                            isValid = false;
+                        } else {
+                            error.style.display = "none";
+                        }
+                    });
+
+                    if (!isValid) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        </script>
     </div>
 </body>
 </html>
