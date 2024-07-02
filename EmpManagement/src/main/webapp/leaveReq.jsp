@@ -198,6 +198,24 @@ tr:hover {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	padding: 20px;
 }
+
+ .form-group-full {
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
+        .star{
+        color:red;
+        font-size:20px;
+        }
 </style>
 <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
 <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
@@ -231,50 +249,106 @@ int n = er2.availDays(eid2);
 <div class="main">
     <div class="form-container">
         <h2>Apply Leave</h2>
-        <form action="ApplyLeaveServlet" method="post">
+         <form id="leaveForm" action="ApplyLeaveServlet" method="post">
+        <div class="form-group-full">
+            <label for="toDate">Available Leaves: <%= n %></label>
+        </div>
+        <input type="hidden" name="id" value="<%=eid2 %>">
+        <input type="hidden" name="origin" value="leave">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="fromDate">From Date<span class="star">*</span></label>
+                <input type="text" id="fromDate" name="fromDate" placeholder="yyyy-mm-dd" required>
+                <span class="error-message" id="fromDateError">Please select fromDate.</span>
+            </div>
+            <div class="form-group">
+                <label for="toDate">To Date<span class="star">*</span></label>
+                <input type="text" id="toDate" name="toDate" placeholder="yyyy-mm-dd" required>
+                <span class="error-message" id="toDateError">Please select toDate.</span>
+            </div>
+            <div class="form-group">
+                <label for="leaveType">Leave Type<span class="star">*</span></label>
+                <select id="leaveType" name="leaveType">
+                    <option value="">Select Leave</option>
+                    <option value="Casual Leave">Casual Leave</option>
+                    <option value="Sick Leave">Sick Leave</option>
+                    <option value="Annual Leave">Annual Leave</option>
+                </select>
+                <span class="error-message" id="leaveTypeError">Please select a leave type.</span>
+            </div>
+        </div>
+        <div class="form-row">
             <div class="form-group-full">
-                <label for="toDate">Available Leaves: <%= n %></label>
+                <label for="reason">Leave Reason<span class="star">*</span></label>
+                <textarea id="reason" name="reason" rows="4" ></textarea>
+                <span class="error-message" id="reasonError">Please provide a reason.</span>
             </div>
-            <input type="hidden" name="id" value="<%=eid2 %>">
-             <input type="hidden" name="origin" value="leave">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="fromDate">From Date:</label>
-                    <input type="text" id="fromDate" name="fromDate" placeholder="yyyy-mm-dd" required>
-                </div>
-                <div class="form-group">
-                    <label for="toDate">To Date:</label>
-                    <input type="text" id="toDate" name="toDate" placeholder="yyyy-mm-dd" required>
-                </div>
-                <div class="form-group">
-                    <label for="leaveType">Leave Type:</label>
-                    <select id="leaveType" name="leaveType" required>
-                        <option value="">Select Leave</option>
-                        <option value="Casual Leave">Casual Leave</option>
-                        <option value="Sick Leave">Sick Leave</option>
-                        <option value="Annual Leave">Annual Leave</option>
-                    </select>
-                </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group-full">
+                <input type="submit" value="Apply Leave">
             </div>
-            <div class="form-row">
-                <div class="form-group-full">
-                    <label for="reason">Leave Reason:</label>
-                    <textarea id="reason" name="reason" rows="4" required></textarea>
-                </div>
+        </div>
+        <% if(request.getAttribute("message") != null) { %>
+            <div class="form-group-full">
+               <script> 
+               alert(" <%= request.getAttribute("message")%> ");
+               </script>
             </div>
-            <div class="form-row">
-                <div class="form-group-full">
-                    <input type="submit" value="Apply Leave">
-                </div>
-            </div>
-            <% if(request.getAttribute("message") != null) { %>
-                <div class="form-group-full">
-                   <script> 
-                   alert(" <%= request.getAttribute("message")%> ");
-                   </script>
-                </div>
-            <% } %>
-        </form>
+        <% } %>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("#fromDate");
+            flatpickr("#toDate");
+
+            document.getElementById("leaveForm").addEventListener("submit", function(event) {
+                let isValid = true;
+
+                const fromDate = document.getElementById("fromDate");
+                const fromDateError = document.getElementById("fromDateError");
+                if (!fromDate.value) {
+                    fromDateError.style.display = "inline";
+                    isValid = false;
+                } else {
+                    fromDateError.style.display = "none";
+                }
+
+                const toDate = document.getElementById("toDate");
+                const toDateError = document.getElementById("toDateError");
+                if (!toDate.value) {
+                    toDateError.style.display = "inline";
+                    isValid = false;
+                } else {
+                    toDateError.style.display = "none";
+                }
+
+                const leaveType = document.getElementById("leaveType");
+                const leaveTypeError = document.getElementById("leaveTypeError");
+                if (!leaveType.value) {
+                    leaveTypeError.style.display = "inline";
+                    isValid = false;
+                } else {
+                    leaveTypeError.style.display = "none";
+                }
+
+                const reason = document.getElementById("reason");
+                const reasonError = document.getElementById("reasonError");
+                if (!reason.value) {
+                    reasonError.style.display = "inline";
+                    isValid = false;
+                } else {
+                    reasonError.style.display = "none";
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
         <%if(r.equals("HR")){ %>
         <div class="AssignLeaves">
 				<h2>Assign Leaves</h2>

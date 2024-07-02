@@ -241,8 +241,21 @@ tr:hover {
     background-color: #0056b3;
 }
 
+.error-message {
+	color: red;
+	font-size: 0.9em;
+	display: none;
+}
+
+.star {
+	color: red;
+	font-size: 20px;
+}
+
 
 </style>
+<link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
+         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 function toggleMonthDropdown() {
     var yearInput = document.getElementById('year');
@@ -306,7 +319,7 @@ window.onload = function() {
                 </div>
             <% } %>
         <h2>Apply Leave</h2>
-        <form action="ApplyLeaveServlet" method="post">
+        <form id="leaveForm" action="ApplyLeaveServlet" method="post">
             <div class="form-group-full">
                 <label for="toDate">Available Leaves: <%= n %></label>
             </div>
@@ -314,27 +327,31 @@ window.onload = function() {
              <input type="hidden" name="origin" value="Reportees">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="fromDate">From Date:</label>
-                    <input type="date" id="fromDate" name="fromDate" required>
+                    <label for="fromDate">From Date<span class="star">*</span></label>
+                    <input type="text" id="fromDate" name="fromDate">
+                    <span class="error-message" id="fromDateError">Please select a date.</span>
                 </div>
                 <div class="form-group">
-                    <label for="toDate">To Date:</label>
-                    <input type="date" id="toDate" name="toDate" required>
+                    <label for="toDate">To Date<span class="star">*</span></label>
+                    <input type="text" id="toDate" name="toDate">
+                    <span class="error-message" id="toDateError">Please select a date.</span>
                 </div>
                 <div class="form-group">
-                    <label for="leaveType">Leave Type:</label>
-                    <select id="leaveType" name="leaveType" required>
+                    <label for="leaveType">Leave Type<span class="star">*</span></label>
+                    <select id="leaveType" name="leaveType">
                         <option value="">Select Leave</option>
                         <option value="Casual Leave">Casual Leave</option>
                         <option value="Sick Leave">Sick Leave</option>
                         <option value="Annual Leave">Annual Leave</option>
                     </select>
+                    <span class="error-message" id="leaveTypeError">Please select leave type.</span>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group-full">
-                    <label for="reason">Leave Reason:</label>
-                    <textarea id="reason" name="reason" rows="4" required></textarea>
+                    <label for="reason">Leave Reason<span class="star">*</span></label>
+                    <textarea id="reason" name="reason" rows="4"></textarea>
+                    <span class="error-message" id="reasonError">Please enter reason.</span>
                 </div>
             </div>
             <div class="form-row">
@@ -344,6 +361,59 @@ window.onload = function() {
             </div>
             
         </form>
+        
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("#fromDate");
+            flatpickr("#toDate");
+
+            document.getElementById("leaveForm").addEventListener("submit", function(event) {
+                let isValid = true;
+
+                const fromDate = document.getElementById("fromDate");
+                const fromDateError = document.getElementById("fromDateError");
+                if (!fromDate.value) {
+                    fromDateError.style.display = "inline";
+                    isValid = false;
+                } else {
+                    fromDateError.style.display = "none";
+                }
+
+                const toDate = document.getElementById("toDate");
+                const toDateError = document.getElementById("toDateError");
+                if (!toDate.value) {
+                    toDateError.style.display = "inline";
+                    isValid = false;
+                } else {
+                    toDateError.style.display = "none";
+                }
+
+                const leaveType = document.getElementById("leaveType");
+                const leaveTypeError = document.getElementById("leaveTypeError");
+                if (!leaveType.value) {
+                    leaveTypeError.style.display = "inline";
+                    isValid = false;
+                } else {
+                    leaveTypeError.style.display = "none";
+                }
+
+                const reason = document.getElementById("reason");
+                const reasonError = document.getElementById("reasonError");
+                if (!reason.value) {
+                    reasonError.style.display = "inline";
+                    isValid = false;
+                } else {
+                    reasonError.style.display = "none";
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+        
+        
     </div>
         </div>
     </div>
