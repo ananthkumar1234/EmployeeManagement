@@ -168,6 +168,7 @@ body {
     <%
         EmpDao empDao = new EmpDao(DBConnect.getConnection());
         int pendingLeavesCount = empDao.getPendingLeavesCount();
+        int attendanceUpdateCount=empDao.getAttendanceUpdateCount();
     %>
     <div class="navbar-container">
         <div class="navbar">
@@ -195,7 +196,7 @@ body {
                 <a href="Reportees.jsp" class="nav-link">Reportees</a>
                 <% } %>
                 <% if (role.equals("HR") || role.equals("Manager")) { %>
-                <a href="AttendanceUpdateRequest.jsp" class="nav-link">Attendance Update</a>
+                <a href="AttendanceUpdateRequest.jsp" class="nav-link attendance-update">Attendance Update <span class="count" style="display: none;"></span></a>
                 <% } %>
 
                 <div class="dropdown">
@@ -218,7 +219,9 @@ body {
             var logoutButton = document.querySelector('.logout-btn');
             var homePageLink = "HRhome.jsp";
             var leaveRequestCount = <%= pendingLeavesCount %>;
+            var attendanceUpdateCount=<%= attendanceUpdateCount %>;
             var leaveRequestsLink = document.querySelector('.leave-requests .count');
+            var attendanceUpdateLink = document.querySelector('.attendance-update .count');
 
             function setActiveLink() {
                 var activeLink = localStorage.getItem('activeLink');
@@ -258,8 +261,17 @@ body {
                 }
             }
 
-            // Call the function to update the badge based on the count
+            function AttendanceUpdateBadge(count) {
+                if (count > 0) {
+                	attendanceUpdateLink.textContent = count;
+                	attendanceUpdateLink.style.display = 'inline';
+                } else {
+                	attendanceUpdateLink.style.display = 'none';
+                }
+            }
+         
             updateLeaveRequestBadge(leaveRequestCount);
+            AttendanceUpdateBadge(attendanceUpdateCount);
         });
     </script>
 </body>

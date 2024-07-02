@@ -997,6 +997,16 @@ public class EmpDao {
 	    return n;
 	}
 	
+	public int getAttendanceUpdateCount() throws SQLException {
+	    String qry = "select count(attendanceid) as count from attendanceUpdate";
+	    Statement st = con.createStatement();
+	    ResultSet rs = st.executeQuery(qry);
+	    rs.next();
+	    int n = rs.getInt("count");
+	    System.out.println("No of LeavePending : " + n);
+	    return n;
+	}
+	
 	
 	public List<Leaves> getLeaveByYear(int eid, String year) {
 		List<Leaves> list = new ArrayList<>();
