@@ -188,13 +188,16 @@ h3 {
 <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
     <script>
   // Initialize Flatpickr after the DOM is loaded
-  document.addEventListener("DOMContentLoaded", function() {
-    flatpickr("#dob");
-  });
-  
-  document.addEventListener("DOMContentLoaded", function() {
-	    flatpickr("#hireDate");
-	  });
+ document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("#hireDate", {
+                dateFormat: "Y-m-d",
+                maxDate: "today", // Restricts future dates
+            });
+            flatpickr("#dob", {
+                dateFormat: "Y-m-d",
+                maxDate: "today", // Restricts future dates
+            });
+        });
 </script>
 </head>
 <body>

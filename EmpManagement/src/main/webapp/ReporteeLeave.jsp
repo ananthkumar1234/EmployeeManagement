@@ -264,6 +264,7 @@ function toggleMonthDropdown() {
 }
 window.onload = function() {
     toggleMonthDropdown(); // Initial check
+
 }
 </script>
 </head>
@@ -362,11 +363,20 @@ window.onload = function() {
             
         </form>
         
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            flatpickr("#fromDate");
-            flatpickr("#toDate");
-
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#fromDate", {
+            minDate: "today",
+            dateFormat: "Y-m-d"
+          });
+        flatpickr("#toDate", {
+            minDate: "today",
+            dateFormat: "Y-m-d"
+          });
+        
+        
+        
             document.getElementById("leaveForm").addEventListener("submit", function(event) {
                 let isValid = true;
 

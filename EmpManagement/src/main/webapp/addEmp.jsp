@@ -152,12 +152,10 @@
             flatpickr("#hireDate", {
                 dateFormat: "Y-m-d",
                 maxDate: "today", // Restricts future dates
-                defaultDate: "today", // Optionally sets default date to today
             });
             flatpickr("#dob", {
                 dateFormat: "Y-m-d",
                 maxDate: "today", // Restricts future dates
-                defaultDate: "today", // Optionally sets default date to today
             });
         });
     </script>

@@ -184,12 +184,11 @@ tr:hover {
             flatpickr("#fromDate", {
                 dateFormat: "Y-m-d",
                 maxDate: "today", // Restricts future dates
-                defaultDate: "today", // Optionally sets default date to today
             });
             flatpickr("#toDate", {
                 dateFormat: "Y-m-d",
                 maxDate: "today", // Restricts future dates
-                defaultDate: "today", // Optionally sets default date to today
+            //    defaultDate: "today", // Optionally sets default date to today
             });
         });
 </script>
