@@ -1099,7 +1099,7 @@ public class EmpDao {
 	    String qry = "SELECT e.EmployeeID, e.FirstName, e.LastName " +
 	                 "FROM Employees e " +
 	                 "JOIN Roles r ON r.RoleId = e.RoleId " +
-	                 "WHERE r.RoleName = 'Trainee' " +
+	                 "WHERE r.RoleName NOT IN ('HR', 'Manager') " +
 	                 "AND e.EmployeeID NOT IN (SELECT employee FROM Manager)";
 	    PreparedStatement ps = con.prepareStatement(qry);
 	    ResultSet rs = ps.executeQuery();
