@@ -17,12 +17,25 @@
 
         .navbar {
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             width: 100%;
             background-color: #333;
             padding: 10px 20px;
+        }
+
+        .navbar .header {
+            color: orange;
+            flex-grow: 1;
+        }
+
+        .navbar .header h1 {
+            margin: 0;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
         }
 
         .navbar a {
@@ -46,16 +59,6 @@
 
         .navbar a.logout:hover {
             background-color: #ff6347;
-        }
-
-        .header {
-            flex-grow: 1;
-            text-align: center;
-            color: orange;
-        }
-
-        .header h1 {
-            margin: 0;
         }
 
         .dropdown {
@@ -145,44 +148,46 @@
             <h1>Emvee Technologies</h1>
         </div>
 
-        <a href="HRhome.jsp" class="nav-link">Home</a>
-        <a href="leaveReq.jsp" class="nav-link">Leaves</a>
-        <% HttpSession se = request.getSession(); Object role = se.getAttribute("role"); %>
-        <% if (role.equals("HR")) { %>
-        <a href="addEmp.jsp" class="nav-link">Add Employee</a>
-        <a href="empDetails.jsp" class="nav-link">Employees</a>
-        <a href="AddHolidays.jsp" class="nav-link">AddHolidays</a>
-        <% } %>
-        
-        <% if (role.equals("HR") || role.equals("Manager")) { %>
-        <a href="Leaves.jsp" class="nav-link">Leave Requests<% Integer count = (Integer) session.getAttribute("count"); if (count != null && count > 0) { %>
-        <span class="count"><%= count %></span>
-        <% } %>
-        </a>
-        <% } %>
-        
-        <a href="attendance.jsp" class="nav-link">Attendance</a>
+        <div class="nav-links">
+            <a href="HRhome.jsp" class="nav-link">Home</a>
+            <a href="leaveReq.jsp" class="nav-link">Leaves</a>
+            <% HttpSession se = request.getSession(); Object role = se.getAttribute("role"); %>
+            <% if (role.equals("HR")) { %>
+            <a href="addEmp.jsp" class="nav-link">Add Employee</a>
+            <a href="empDetails.jsp" class="nav-link">Employees</a>
+            <a href="AddHolidays.jsp" class="nav-link">Add Holidays</a>
+            <% } %>
+            
+            <% if (role.equals("HR") || role.equals("Manager")) { %>
+            <a href="Leaves.jsp" class="nav-link">Leave Requests<% Integer count = (Integer) session.getAttribute("count"); if (count != null && count > 0) { %>
+            <span class="count"><%= count %></span>
+            <% } %>
+            </a>
+            <% } %>
+            
+            <a href="attendance.jsp" class="nav-link">Attendance</a>
 
-        <% if (!role.equals("HR")) { %>
-        <a href="ViewHolidays.jsp" class="nav-link">Holidays</a>
-        <% } %>
-        
-        <% if (role.equals("Manager")) { %>
-        <a href="Reportees.jsp" class="nav-link">Reportees</a>
-        <% } %>
-        
-        <% if (role.equals("HR") || role.equals("Manager")) { %>
-        <a href="AttendanceUpdateRequest.jsp" class="nav-link">Attendance Update</a>
-        <% } %>
-        
-        <div class="dropdown">
-            <button class="dropbtn">
-                <img alt="Avatar" src="Images/avatar2.png">
-            </button>
-            <div class="dropdown-content">
-                <a href="profile.jsp">Profile</a>
-                <a href="change_password.jsp">Change Password</a>
-                <a href="LogoutServlet" class="logout-btn">Logout</a>
+            <% if (!role.equals("HR")) { %>
+            <a href="ViewHolidays.jsp" class="nav-link">Holidays</a>
+            <% } %>
+            
+            <% if (role.equals("Manager")) { %>
+            <a href="Reportees.jsp" class="nav-link">Reportees</a>
+            <% } %>
+            
+            <% if (role.equals("HR") || role.equals("Manager")) { %>
+            <a href="AttendanceUpdateRequest.jsp" class="nav-link">Attendance Update</a>
+            <% } %>
+
+            <div class="dropdown">
+                <button class="dropbtn">
+                    <img alt="Avatar" src="Images/avatar2.png">
+                </button>
+                <div class="dropdown-content">
+                    <a href="profile.jsp">Profile</a>
+                    <a href="change_password.jsp">Change Password</a>
+                    <a href="LogoutServlet" class="logout-btn">Logout</a>
+                </div>
             </div>
         </div>
     </div>
