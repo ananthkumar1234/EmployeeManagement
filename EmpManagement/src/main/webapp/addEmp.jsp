@@ -136,6 +136,18 @@
         }
 
     </style>
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
+<script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+    <script>
+  // Initialize Flatpickr after the DOM is loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#dob");
+  });
+  
+  document.addEventListener("DOMContentLoaded", function() {
+	    flatpickr("#hireDate");
+	  });
+</script>
 </head>
 <body>
     <% 
@@ -166,7 +178,7 @@
                         </div>
                         <div class="form-group">
                             <label for="dob">Date of Birth:</label>
-                            <input type="date" id="dob" name="dob" required>
+                            <input type="text" id="dob" name="dob" placeholder="yyyy-mm-dd" required>
                         </div>
                         <div class="form-group">
                             <label for="gender">Gender:</label>
@@ -239,7 +251,7 @@
                         <h3>Employee Details</h3>
                         <div class="form-group">
                             <label for="hireDate">Hire Date:</label>
-                            <input type="date" id="hireDate" name="hireDate" required>
+                            <input type="text" id="hireDate" name="hireDate" placeholder="yyyy-mm-dd" required>
                         </div>
                         <div class="form-group">
                             <label for="role">Role:</label>

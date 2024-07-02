@@ -213,8 +213,9 @@ tr:hover {
 	  });
 </script>
 </head>
-<body>
 <%@include file="navbar.jsp"%>
+<body>
+
 
 <%
 HttpSession ses2 = request.getSession();
@@ -239,11 +240,11 @@ int n = er2.availDays(eid2);
             <div class="form-row">
                 <div class="form-group">
                     <label for="fromDate">From Date:</label>
-                    <input type="text" id="fromDate" name="fromDate" required>
+                    <input type="text" id="fromDate" name="fromDate" placeholder="yyyy-mm-dd" required>
                 </div>
                 <div class="form-group">
                     <label for="toDate">To Date:</label>
-                    <input type="text" id="toDate" name="toDate" required>
+                    <input type="text" id="toDate" name="toDate" placeholder="yyyy-mm-dd" required>
                 </div>
                 <div class="form-group">
                     <label for="leaveType">Leave Type:</label>

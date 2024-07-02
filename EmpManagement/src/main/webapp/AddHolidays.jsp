@@ -161,7 +161,15 @@ color: #333}
     
     </style>
     
-    
+     <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
+<script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+    <script>
+  // Initialize Flatpickr after the DOM is loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#date");
+  });
+
+</script>
     
 </head>
 <body>
@@ -173,7 +181,7 @@ color: #333}
     
     <form action="AddHolidayServlet" method="post">
         <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required><br><br>
+        <input type="text" id="date" name="date" placeholder="yyyy-mm-dd" required><br><br>
         <label for="holidayName">Holiday Name:</label>
         <input type="text" id="holidayName" name="holidayName" required><br><br>
         <button type="submit">Add Holiday</button>

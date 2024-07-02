@@ -176,6 +176,20 @@ tr:hover {
 }
 
 </style>
+
+<link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
+<script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+    <script>
+  // Initialize Flatpickr after the DOM is loaded
+  document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#fromDate");
+  });
+  
+  document.addEventListener("DOMContentLoaded", function() {
+	    flatpickr("#toDate");
+	  });
+</script>
+
 <script>
 function toggleMonthDropdown() {
     var yearInput = document.getElementById('year');
@@ -261,9 +275,9 @@ window.onload = function() {
                             <option value="12" <%= "12".equals(request.getParameter("month")) ? "selected" : "" %>>December</option>
                         </select>
                         <label for="fromDate">From Date:</label>
-                        <input type="date" id="fromDate" name="fromDate" value="<%= request.getParameter("fromDate") != null ? request.getParameter("fromDate") : "" %>">
+                        <input type="text" id="fromDate" name="fromDate" placeholder="yyyy-mm-dd" value="<%= request.getParameter("fromDate") != null ? request.getParameter("fromDate") : "" %>">
                         <label for="toDate">To Date:</label>
-                        <input type="date" id="toDate" name="toDate" value="<%= request.getParameter("toDate") != null ? request.getParameter("toDate") : "" %>">
+                        <input type="text" id="toDate" name="toDate" placeholder="yyyy-mm-dd" value="<%= request.getParameter("toDate") != null ? request.getParameter("toDate") : "" %>">
                         <input type="hidden" name="id" value="<%= id %>">
                         <button type="submit">Filter</button>
                     </form>
