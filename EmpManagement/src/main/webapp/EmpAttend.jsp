@@ -126,13 +126,12 @@ tr:hover {
     color: #333;
 }
 .filter input[type="text"],
-.filter input[type="date"],
 .filter select {
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ddd;
     font-size: 14px;
-    width: 150px;
+    width: 100%;
 }
 .filter button {
     padding: 10px 20px;
@@ -289,6 +288,7 @@ window.onload = function() {
                                 <th scope="col">Date</th>
                                 <th scope="col">CheckIn</th>
                                 <th scope="col">CheckOut</th>
+                                <th scope="col">Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -306,6 +306,7 @@ window.onload = function() {
                             <td scope="row"><%= e.getDate() %></td>
                             <td><%= e.getCheckin() %></td>
                             <td><%= e.getCheckout() %></td>
+                            <td><%= e.getRemarks() %></td>
                         </tr>
                         <% 
                             }
