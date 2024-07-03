@@ -1,5 +1,6 @@
 <%@ page import="com.empmngt.dao.EmpDao" %>
 <%@ page import="com.empmngt.jdbc.DBConnect" %>
+<%@ page import="com.empmngt.enities.Employees" %>
 
 <!DOCTYPE html>
 <html>
@@ -166,9 +167,14 @@ body {
 <body>
 
     <%
+    	HttpSession se=request.getSession();
         EmpDao empDao = new EmpDao(DBConnect.getConnection());
-        int pendingLeavesCount = empDao.getPendingLeavesCount();
-        int attendanceUpdateCount=empDao.getAttendanceUpdateCount();
+        
+        Object role=se.getAttribute("role");
+        int currLogId= ((Employees)se.getAttribute("employee")).getEmpId();
+        
+        int pendingLeavesCount = role.equals("HR")? empDao.getPendingLeavesCount():role.equals("Manager")? empDao.getPendingLeavesForMgrCount(currLogId):0;
+        int attendanceUpdateCount= role.equals("HR")? empDao.getAttendanceUpdateCount():role.equals("Manager")? empDao.getMgrAttendanceUpdateCount(currLogId):0;
     %>
     <div class="navbar-container">
         <div class="navbar">
@@ -179,7 +185,7 @@ body {
             <div class="nav-links">
                 <a href="HRhome.jsp" class="nav-link">Home</a>
                 <a href="leaveReq.jsp" class="nav-link">Leaves</a>
-                <% HttpSession se = request.getSession(); Object role = se.getAttribute("role"); %>
+                
                 <% if (role.equals("HR")) { %>
                 <a href="addEmp.jsp" class="nav-link">Add Employee</a>
                 <a href="empDetails.jsp" class="nav-link">Employees</a>

@@ -1407,6 +1407,17 @@ public class EmpDao {
 	    return leave;
 	}
 
+	
+	public int getMgrAttendanceUpdateCount(int id) throws SQLException{
+		String qry = "select count(au.attendanceid) as count from attendanceUpdate au join Manager m on au.employeeid=m.employee WHERE m.manager=?";
+		PreparedStatement st = con.prepareStatement(qry);
+		st.setInt(1, id);
+		ResultSet rs=st.executeQuery();
+		rs.next();
+		int n=rs.getInt("count");
+		return n;
+	}
+
  
 }
 
