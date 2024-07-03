@@ -17,6 +17,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import com.empmngt.enities.AddHoliday;
 import com.empmngt.enities.Attendance;
+import com.empmngt.enities.EmailDetails;
 import com.empmngt.enities.Employees;
 import com.empmngt.enities.Holidays;
 import com.empmngt.enities.Leaves;
@@ -1357,6 +1358,55 @@ public class EmpDao {
 	    }
 	    return false;
 	}
+	
+	
+	public EmailDetails getEmails(int eid) throws SQLException  
+	{
+		String qry= "SELECT " +
+                "emp.email AS employee_email, " +
+                "hr.email AS hr_email, " +
+                "mgr.email AS manager_email " +
+                "FROM employees emp " +
+                "JOIN roles r ON emp.roleid = r.roleid " +
+                "JOIN manager m ON emp.employeeid = m.employee " +
+                "JOIN employees mgr ON m.manager = mgr.employeeid " +
+                "JOIN employees hr ON hr.roleid = (SELECT roleid FROM roles WHERE rolename = 'HR') " +
+                "WHERE emp.employeeid = ?";
+		PreparedStatement ps= con.prepareStatement(qry);
+		ps.setInt(1, eid);
+		ResultSet rs = ps.executeQuery();
+		if(rs.next())
+		{
+			EmailDetails em=new EmailDetails();
+			em.setEmployeeEmail(rs.getString("employee_email"));
+			em.setManagerEmail(rs.getString("manager_email"));
+			em.setHrEmail(rs.getString("hr_email"));
+			return em;
+		}
+		return null;
+	}
+	
+	
+	
+	public Leaves getLastLeaveRecord(int employeeId) throws SQLException {
+	    Leaves leave = null;
+	    String query = "SELECT * FROM leaves WHERE employeeId = ? ORDER BY leaveId DESC LIMIT 1";
+	         PreparedStatement pstmt = con.prepareStatement(query);
+	        pstmt.setInt(1, employeeId);
+	        ResultSet rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            leave = new Leaves();
+	            leave.setLeaveId(rs.getInt("leaveId"));
+	            leave.setEmployeeID(rs.getInt("employeeId"));
+	            leave.setFromDate(rs.getString("startDate"));
+	            leave.setToDate(rs.getString("endDate"));
+	            leave.setAppliedReason(rs.getString("reason"));
+	            return leave;
+	        }
+	    return leave;
+	}
+
  
 }
 
