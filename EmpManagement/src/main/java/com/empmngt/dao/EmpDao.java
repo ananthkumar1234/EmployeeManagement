@@ -1417,6 +1417,20 @@ public class EmpDao {
 		int n=rs.getInt("count");
 		return n;
 	}
+	
+	
+	public String insertRole(String role) throws SQLException
+	{
+		String qry="insert into roles(rolename) values(?)";
+		PreparedStatement ps=con.prepareStatement(qry);
+		ps.setString(1, role);
+		int i = ps.executeUpdate();
+		if(i>0)
+		{
+			return "Role Added";
+		}
+		return "Something went Wrong!!!";
+	}
 
  
 }
