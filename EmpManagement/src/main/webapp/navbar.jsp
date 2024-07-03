@@ -1,6 +1,6 @@
 <%@ page import="com.empmngt.dao.EmpDao" %>
+<%@ page import="com.empmngt.enities.Employees" %>
 <%@ page import="com.empmngt.jdbc.DBConnect" %>
-<%@ page import="com.empmngt.enities.Employees" %>
 
 <!DOCTYPE html>
 <html>
@@ -167,14 +167,21 @@ body {
 <body>
 
     <%
-    	HttpSession se=request.getSession();
+        HttpSession se = request.getSession(); 
+    	Object role = se.getAttribute("role");
+        int empid = ((Employees)(se.getAttribute("employee"))).getEmpId();
+    	int pendingLeavesCount=0;
+    	int attendanceUpdateCount=0;
         EmpDao empDao = new EmpDao(DBConnect.getConnection());
-        
-        Object role=se.getAttribute("role");
-        int currLogId= ((Employees)se.getAttribute("employee")).getEmpId();
-        
-        int pendingLeavesCount = role.equals("HR")? empDao.getPendingLeavesCount():role.equals("Manager")? empDao.getPendingLeavesForMgrCount(currLogId):0;
-        int attendanceUpdateCount= role.equals("HR")? empDao.getAttendanceUpdateCount():role.equals("Manager")? empDao.getMgrAttendanceUpdateCount(currLogId):0;
+        if(role.equals("HR")){
+        pendingLeavesCount = empDao.getPendingLeavesCount();   //HR
+        attendanceUpdateCount=empDao.getAttendanceUpdateCount();   //HR
+        }else
+        {
+        	 pendingLeavesCount = empDao.getPendingLeavesForMgrCount(empid);   //MGR
+             attendanceUpdateCount=empDao.getMgrAttendanceUpdateCount(empid);   //MGR
+        }
+        	
     %>
     <div class="navbar-container">
         <div class="navbar">
@@ -185,7 +192,7 @@ body {
             <div class="nav-links">
                 <a href="HRhome.jsp" class="nav-link">Home</a>
                 <a href="leaveReq.jsp" class="nav-link">Leaves</a>
-                
+                <% %>
                 <% if (role.equals("HR")) { %>
                 <a href="addEmp.jsp" class="nav-link">Add Employee</a>
                 <a href="empDetails.jsp" class="nav-link">Employees</a>
