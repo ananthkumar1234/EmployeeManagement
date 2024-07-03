@@ -59,11 +59,11 @@ public class ApplyLeaveServlet extends HttpServlet {
 			int n= eDao.availDays(id);
 			System.out.println(n);
 			int days = eDao.validateLeave(fromDate,toDate);
-			System.out.println("NO of Days : "+days);
+			//System.out.println("NO of Days : "+days);
 			
 			if(days==0)
 			{
-				System.out.println("The applied date is a holiday!!!");
+				//System.out.println("The applied date is a holiday!!!");
 				req.setAttribute("message","The applied date is a holiday!!!");
 				if ("leave".equals(origin)) {
 		            req.getRequestDispatcher("leaveReq.jsp").forward(req, resp);
@@ -78,7 +78,7 @@ public class ApplyLeaveServlet extends HttpServlet {
 				//boolean res = eDao.applyLeave(lev);
 				if(eDao.applyLeave(lev)) {
 //				resp.sendRedirect("leaveReq.jsp?message=Leave applied");
-					System.out.println("Leave applied");
+					//System.out.println("Leave applied");
 				req.setAttribute("message"," Leave applied successfully");
 				 if ("leave".equals(origin)) {
 			            req.getRequestDispatcher("leaveReq.jsp").forward(req, resp);
@@ -89,7 +89,7 @@ public class ApplyLeaveServlet extends HttpServlet {
 				}
 			}else
 			{
-				System.out.println("You don't have enough leaves!!!");
+				//System.out.println("You don't have enough leaves!!!");
 				req.setAttribute("message","You don't have enough leaves!!!");
 				if ("leave".equals(origin)) {
 		            req.getRequestDispatcher("leaveReq.jsp").forward(req, resp);

@@ -32,7 +32,7 @@ public class UpdateRejectReasonServlet extends HttpServlet {
 		}
 
 		int eid = Integer.parseInt(req.getParameter("eid"));
-		System.out.println("Approvedby "+eid);
+		//System.out.println("Approvedby "+eid);
 		int leaveid=0;
 		try {
 			leaveid = Integer.parseInt(req.getParameter("leaveid"));
@@ -49,7 +49,7 @@ public class UpdateRejectReasonServlet extends HttpServlet {
 
 			if(session.getAttribute("role").equals("HR")) {
 				int n = eDao.getPendingLeavesCount();
-				System.out.println("Count of Reocrds: "+n);
+				//System.out.println("Count of Reocrds: "+n);
 				session.setAttribute("count", n);
 
 				req.getRequestDispatcher("Leaves.jsp").forward(req, resp);
@@ -57,7 +57,7 @@ public class UpdateRejectReasonServlet extends HttpServlet {
 			else if(session.getAttribute("role").equals("Manager")) 
 			{
 				int n = eDao.getPendingLeavesForMgrCount(em.getEmpId());
-				System.out.println("Count of Reocrds: "+n);
+				//System.out.println("Count of Reocrds: "+n);
 				session.setAttribute("count", n);
 
 				req.getRequestDispatcher("Leaves.jsp").forward(req, resp);

@@ -81,8 +81,18 @@ public class AddEmpServlet extends HttpServlet{
             ResultSet rs=ps.executeQuery();
             if(!rs.next())
             {
-            eDao.addEmp(e,uc);
-            req.getRequestDispatcher("addEmp.jsp").forward(req, resp);
+            boolean f=eDao.addEmp(e,uc);
+            
+            	if(f) 
+            	{
+            		req.setAttribute("msg", "Employee Added");
+            		req.getRequestDispatcher("addEmp.jsp").forward(req, resp);
+            	}
+            	else
+            	{
+            		req.setAttribute("msg", "Employee not added - Ensure the details entered are correct");
+            		req.getRequestDispatcher("addEmp.jsp").forward(req, resp);
+            	}
             }
             else
             {

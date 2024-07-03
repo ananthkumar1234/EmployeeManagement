@@ -37,7 +37,7 @@ public class PasswordServlet extends HttpServlet{
 		try (Connection con = DBConnect.getConnection()) {
             EmpDao eDao = new EmpDao(con);
            boolean f =  eDao.changePwd(uname,hashPwd);
-           System.out.println("pwd : "+hashPwd+" : uname :"+uname);
+           //System.out.println("pwd : "+hashPwd+" : uname :"+uname);
            if(f)
            {
                resp.sendRedirect("login.jsp?message=password changed successfully");

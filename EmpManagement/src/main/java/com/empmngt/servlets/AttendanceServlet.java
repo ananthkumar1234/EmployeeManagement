@@ -38,21 +38,21 @@ public class AttendanceServlet extends HttpServlet{
 				{
 					if(eDao.validateAttendance(eid))
 					{
-						System.out.println("You are on leave");
+						//System.out.println("You are on leave");
 						req.setAttribute("msg","You are on leave");
 						req.getRequestDispatcher("attendance.jsp").forward(req, resp);
 					}else
 					{
 						if(eDao.validateAttendanceHoliday())
 						{
-							System.out.println("In Holiday Validation true");
+							//System.out.println("In Holiday Validation true");
 							eDao.insertLogin(eid);
 							req.setAttribute("msg","Logged in !!!");
 							req.getRequestDispatcher("attendance.jsp").forward(req, resp);
 						}
 						else
 						{
-							System.out.println("In Holiday Validation false");
+							//System.out.println("In Holiday Validation false");
 							req.setAttribute("flag", true);
 							req.setAttribute("msg","Today it's not working day(Holiday!)");
 							req.getRequestDispatcher("attendance.jsp").forward(req, resp);

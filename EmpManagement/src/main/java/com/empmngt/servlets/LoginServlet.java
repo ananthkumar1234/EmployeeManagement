@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet{
 	            Employees emp = eDao.getEmpData(uname);
 	            
 	            EmployeeAttachment ea = new EmployeeAttachment();
-	            System.out.println(ea);
+	            //System.out.println(ea);
 	            HttpSession session = req.getSession();
                 session.setAttribute("username", uname);
                 session.setAttribute("role", info);
@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet{
                 } else if(info.equals("Manager"))
                 {
                 	int n = eDao.getPendingLeavesForMgrCount(emp.getEmpId());
-                	System.out.println("Count of Reocrds: "+n);
+                	//System.out.println("Count of Reocrds: "+n);
                     session.setAttribute("employee", emp);
                     session.setAttribute("count", n);
                     req.getRequestDispatcher("EmpHome.jsp").forward(req, resp);

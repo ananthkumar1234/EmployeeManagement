@@ -23,7 +23,7 @@ public class ResetPasswordServlet extends HttpServlet {
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
         
-        System.out.println("new : "+newPassword+" confirm : "+confirmPassword);
+        //System.out.println("new : "+newPassword+" confirm : "+confirmPassword);
         
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");

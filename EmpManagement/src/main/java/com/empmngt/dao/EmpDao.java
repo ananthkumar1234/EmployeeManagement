@@ -79,8 +79,9 @@ public class EmpDao {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Add employee details
-	public void addEmp(Employees emp,User_credentials uc)
+	public boolean addEmp(Employees emp,User_credentials uc)
 	{
+		boolean b=false;
 		try {
 			String qry="insert into employees(FirstName,LastName,DateOfBirth,Email,Phone,Address,HireDate,RoleID,tempAddres,maritalstatus,gender,emergencyPhoneNo,emergencyContactpersonName,bloodGroup) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps=con.prepareStatement(qry);
@@ -101,17 +102,22 @@ public class EmpDao {
 			ps.setString(14, emp.getBloodgroup());
 
 			int i=ps.executeUpdate();
+			if(i>0)
+			{
 			String qry2="SELECT employeeID FROM employees ORDER BY employeeID DESC LIMIT 1";
 			ResultSet rs= con.prepareStatement(qry2).executeQuery();
 			//				
 			rs.next();
 			int id=rs.getInt("employeeID");
-			getCredentials(id,uc);
+			b=getCredentials(id,uc);
+			}
 
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		
+		return b;
 
 	}
 
@@ -167,7 +173,7 @@ public class EmpDao {
 	// Edit employee details
 
 
-	public void getCredentials(int id,User_credentials uc)
+	public boolean getCredentials(int id,User_credentials uc)
 	{
 
 		try {
@@ -178,21 +184,24 @@ public class EmpDao {
 			ps.setString(2,uc.getUsername());
 			ps.setString(3, uc.getPassword());
 
-			int i=ps.executeUpdate();
+			ps.executeUpdate();
 			
 			
 			
 			PreparedStatement ps1=con.prepareStatement(qry1);
-			ps1.setInt(i, id);
-			ps1.executeUpdate();
-
-			//				addProfile(id,pic);
+			ps1.setInt(1, id);
+			int i=ps1.executeUpdate();
+			
+			if(i>0) return true;
+			
 			
 
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		
+		return false;
 
 	}
 

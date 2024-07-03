@@ -33,7 +33,7 @@ public class UpdateLogoutServlet extends HttpServlet{
 		        req.getRequestDispatcher("attendance.jsp").forward(req, resp);
 		    } catch(Exception e) {
 		        e.printStackTrace();
-		        System.out.println("Error");
+		        //System.out.println("Error");
 		    }
 		} else {
 		    // Handle case where employee is not in session
