@@ -460,14 +460,16 @@ if (f != null && f) {%>
 						<span class="close-btn" onclick="closePopup('myPopup2')">&times;</span>
 						<h2>Update Attendance</h2>
 						<form action="requestUpdate" method="get" class="PopupForm">
-							<label for="attenId"></label> <input type="hidden" id="attenId"
-								name="attenId"> <input type="hidden" name="empName"
-								value="<%=empName%>"> <label for="date">Date:</label> <input
-								type="text" id="date" name="date" readonly> <label
-								for="cit">Check In Time:</label> <input type="text" id="cit"
-								name="cit"> <label for="cot">Check Out Time:</label> <input
-								type="text" id="cot" name="cot"> <input type="submit"
-								value="Request Update">
+							<label for="attenId"></label> 
+							<input type="hidden" id="attenId" name="attenId"> 
+							<input type="hidden" name="empName" value="<%=empName%>"> 
+							<label for="date">Date:</label> 
+							<input type="text" id="date" name="date" readonly> 
+							<label for="cit">Check In Time:</label> 
+							<input type="text" id="cit" name="cit" placeholder="HH:MM:SS (24hr)"> 
+							<label for="cot">Check Out Time:</label> 
+							<input type="text" id="cot" name="cot" placeholder="HH:MM:SS (24hr)"> 
+							<input type="submit" value="Request Update">
 						</form>
 					</div>
 

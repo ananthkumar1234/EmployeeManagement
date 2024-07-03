@@ -673,9 +673,10 @@ public class EmpDao {
 
 
 
-	public boolean applyLeave(Leaves leave) {
-		boolean isSuccess = false;
+	public int applyLeave(Leaves leave) {
+		int leaveid =0;
 		String query = "INSERT INTO Leaves (EmployeeID, LeaveType, StartDate, EndDate, LeaveStatus, AppliedDate, reason,TotalDays) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
+		String qry2="SELECT LeaveId FROM Leaves ORDER BY employeeID DESC LIMIT 1";
 
 		try (PreparedStatement pst = con.prepareStatement(query)) {
 			pst.setInt(1, leave.getEmployeeID());
@@ -689,12 +690,15 @@ public class EmpDao {
 
 			int rowCount = pst.executeUpdate();
 			if (rowCount > 0) {
-				isSuccess = true;
+				ResultSet rs= con.prepareStatement(qry2).executeQuery();
+				rs.next();
+				leaveid=rs.getInt("LeaveId");
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return isSuccess;
+		return leaveid;
 	}
 
 
@@ -756,10 +760,23 @@ public class EmpDao {
 	
 	public void deleteLeaveRecord(int lid) throws SQLException
 	{
-		String qry="delete from leaves where leaveid=?";
+		
+		String qry="UPDATE leavesStock ls "
+				+ "JOIN Leaves l ON ls.employeeid = l.employeeid "
+				+ "SET ls.availableleaves = ls.availableleaves + l.TotalDays, "
+				+ "ls.consumedleaves = ls.consumedleaves - l.TotalDays "
+				+ "WHERE l.leaveid = ?;";
+		
+		String qry2="delete from leaves where leaveid=?";
+		
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, lid);
-		int i = ps.executeUpdate();
+		ps.executeUpdate();
+		
+		PreparedStatement ps2=con.prepareStatement(qry2);
+		ps2.setInt(1, lid);
+		
+		int i =ps2.executeUpdate();
 		if(i>0)
 		{
 			System.out.println("Leave Record deleted");
@@ -968,8 +985,8 @@ public class EmpDao {
 		String status = rs.getString("leavestatus");
 		int totaldays = rs.getInt("totaldays");
 
-		if(status.equals("Approved")) {
-		updateAvailLeaves(totaldays,empid);
+		if(status.equals("Pending") || status.equals("Rejected")) {
+		updateAvailLeaves(totaldays,empid,status);
 		}
 		ps.close();
 		rs.close();
@@ -977,14 +994,28 @@ public class EmpDao {
 		
 	}
 	
-	public void updateAvailLeaves(int totaldays,int empid) throws SQLException
+	public void updateAvailLeaves(int totaldays,int empid,String status) throws SQLException
 	{
-		String qry2="update leavesStock set availableleaves = availableleaves - ?,consumedleaves = consumedleaves + ? where employeeid=?";
-		PreparedStatement ps2=con.prepareStatement(qry2);
-		ps2.setInt(1, totaldays);
-		ps2.setInt(2, totaldays);
-		ps2.setInt(3, empid);
-		int i = ps2.executeUpdate();
+		String qry="update leavesStock set availableleaves = availableleaves - ?,consumedleaves = consumedleaves + ? where employeeid=?";
+		String qry2="update leavesStock set availableleaves = availableleaves + ?,consumedleaves = consumedleaves - ? where employeeid=?";
+		int i=0;
+		if(status.equals("Pending"))
+		{
+			PreparedStatement ps=con.prepareStatement(qry);
+			ps.setInt(1, totaldays);
+			ps.setInt(2, totaldays);
+			ps.setInt(3, empid);
+			i = ps.executeUpdate();
+		}
+		else
+		{
+			PreparedStatement ps=con.prepareStatement(qry2);
+			ps.setInt(1, totaldays);
+			ps.setInt(2, totaldays);
+			ps.setInt(3, empid);
+			i = ps.executeUpdate();
+		}
+		
 		if(i>0)
 		{
 			System.out.println("Leaves Updated");
@@ -1209,7 +1240,7 @@ public class EmpDao {
 	
 	public String UpdateAttendance(int AID,String Date, String CITime, String COTime) throws SQLException
 	{
-		String qry="Update Attendance SET Date=?,CheckInTime=?, CheckOutTime=? where AttendanceId=?";
+		String qry="Update Attendance SET Date=?,CheckInTime=?, CheckOutTime=?, Remarks='-' where AttendanceId=?";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setString(1,Date);
 		ps.setString(2,CITime);

@@ -40,7 +40,7 @@ public class UpdateRejectReasonServlet extends HttpServlet {
 		{
 			System.out.println(ne);
 		}
-		System.out.println("LeaveId "+leaveid);
+		
 		try (Connection con = DBConnect.getConnection()) {
 			EmpDao eDao = new EmpDao(con);
 			Employees em = eDao.getEmpData(uname);
