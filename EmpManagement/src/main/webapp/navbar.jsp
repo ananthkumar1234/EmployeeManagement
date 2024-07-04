@@ -7,6 +7,7 @@
 <head>
 <title>Navbar</title>
 <style>
+/* Your existing CSS here */
 * {
     margin: 0;
     padding: 0;
@@ -142,6 +143,8 @@ body {
     margin-left: 5px;
 }
 
+
+
 @media ( max-width : 768px) {
     .navbar {
         padding: 0 10px;
@@ -161,10 +164,22 @@ body {
         min-width: 120px;
     }
 }
+/* Add or modify these CSS rules */
+.dropdown.active .dropbtn, 
+.navbar .nav-dropdown.active,
+.dropdown.active > .dropbtn {
+    background-color: #ff9800;
+    color: white;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-content a.active {
+    background-color: #ff9800;
+    color: white;
+}
 </style>
 </head>
 <body>
-
     <%
         HttpSession se = request.getSession(); 
         Object role = se.getAttribute("role");
@@ -179,6 +194,9 @@ body {
             pendingLeavesCount = empDao.getPendingLeavesForMgrCount(empid);
             attendanceUpdateCount = empDao.getMgrAttendanceUpdateCount(empid);
         }
+
+        // Get the current page name
+        String currentPage = request.getServletPath();
     %>
     <div class="navbar-container">
         <div class="navbar">
@@ -187,75 +205,75 @@ body {
             </div>
 
             <div class="nav-links">
-                <a href="HRhome.jsp" class="nav-link">Home</a>
+                <a href="HRhome.jsp" class="nav-link <%= currentPage.equals("/HRhome.jsp") ? "active" : "" %>">Home</a>
 
                 <% if (role.equals("HR")) { %>
-                <div class="dropdown">
-                    <button class="dropbtn">Employees</button>
+                <div class="dropdown <%= currentPage.equals("/addEmp.jsp") || currentPage.equals("/empDetails.jsp") ? "active" : "" %>">
+                    <button class="dropbtn nav-dropdown">Employees</button>
                     <div class="dropdown-content">
-                        <a href="addEmp.jsp" class="nav-link">Add Employee</a>
-                        <a href="empDetails.jsp" class="nav-link">Employees</a>
+                        <a href="addEmp.jsp" class="nav-link <%= currentPage.equals("/addEmp.jsp") ? "active" : "" %>">Add Employee</a>
+                        <a href="empDetails.jsp" class="nav-link <%= currentPage.equals("/empDetails.jsp") ? "active" : "" %>">Employees</a>
                     </div>
                 </div>
                 <% } %>
 
                 <% if (role.equals("HR") || role.equals("Manager")) { %>
-                <div class="dropdown">
-                    <button class="dropbtn">
+                <div class="dropdown <%= currentPage.equals("/leaveReq.jsp") || currentPage.equals("/Leaves.jsp") ? "active" : "" %>">
+                    <button class="dropbtn nav-dropdown">
                         Leaves
                         <span class="count-wrapper">
                             <span class="count leaves-count" id="leavesMainCount"></span>
                         </span>
                     </button>
                     <div class="dropdown-content">
-                        <a href="leaveReq.jsp" class="nav-link">Leaves</a>
-                        <a href="Leaves.jsp" class="nav-link leave-requests">
+                        <a href="leaveReq.jsp" class="nav-link <%= currentPage.equals("/leaveReq.jsp") ? "active" : "" %>">Leaves</a>
+                        <a href="Leaves.jsp" class="nav-link leave-requests <%= currentPage.equals("/Leaves.jsp") ? "active" : "" %>">
                             Leave Requests <span class="count leaves-count" id="leavesSubCount"></span>
                         </a>
                     </div>
                 </div>
                 <% } else { %>
-                <a href="leaveReq.jsp" class="nav-link">Leaves</a>
+                <a href="leaveReq.jsp" class="nav-link <%= currentPage.equals("/leaveReq.jsp") ? "active" : "" %>">Leaves</a>
                 <% } %>
 
                 <% if (role.equals("HR") || role.equals("Manager")) { %>
-                <div class="dropdown">
-                    <button class="dropbtn">
+                <div class="dropdown <%= currentPage.equals("/attendance.jsp") || currentPage.equals("/AttendanceUpdateRequest.jsp") ? "active" : "" %>">
+                    <button class="dropbtn nav-dropdown">
                         Attendance
                         <span class="count-wrapper">
                             <span class="count attendance-count" id="attendanceMainCount"></span>
                         </span>
                     </button>
                     <div class="dropdown-content">
-                        <a href="attendance.jsp" class="nav-link">Attendance</a>
-                        <a href="AttendanceUpdateRequest.jsp" class="nav-link attendance-update">
+                        <a href="attendance.jsp" class="nav-link <%= currentPage.equals("/attendance.jsp") ? "active" : "" %>">Attendance</a>
+                        <a href="AttendanceUpdateRequest.jsp" class="nav-link attendance-update <%= currentPage.equals("/AttendanceUpdateRequest.jsp") ? "active" : "" %>">
                             Attendance Update <span class="count attendance-count" id="attendanceSubCount"></span>
                         </a>
                     </div>
                 </div>
                 <% } else { %>
-                <a href="attendance.jsp" class="nav-link">Attendance</a>
+                <a href="attendance.jsp" class="nav-link <%= currentPage.equals("/attendance.jsp") ? "active" : "" %>">Attendance</a>
                 <% } %>
 
                 <% if (role.equals("Manager")) { %>
-                <a href="Reportees.jsp" class="nav-link">Reportees</a>
+                <a href="Reportees.jsp" class="nav-link <%= currentPage.equals("/Reportees.jsp") ? "active" : "" %>">Reportees</a>
                 <% } %>
 
                 <% if (role.equals("HR")) { %>
-                <a href="AddHolidays.jsp" class="nav-link">Add Holidays</a>
+                <a href="AddHolidays.jsp" class="nav-link <%= currentPage.equals("/AddHolidays.jsp") ? "active" : "" %>">Add Holidays</a>
                 <% } %>
 
                 <% if (!role.equals("HR")) { %>
-                <a href="ViewHolidays.jsp" class="nav-link">Holidays</a>
+                <a href="ViewHolidays.jsp" class="nav-link <%= currentPage.equals("/ViewHolidays.jsp") ? "active" : "" %>">Holidays</a>
                 <% } %>
 
                 <div class="dropdown">
-                    <button class="dropbtn">
+                    <button class="dropbtn nav-dropdown">
                         <img alt="Avatar" src="Images/avatar2.png">
                     </button>
                     <div class="dropdown-content">
-                        <a href="profile.jsp">Profile</a>
-                        <a href="change_password.jsp">Change Password</a>
+                        <a href="profile.jsp" class="<%= currentPage.equals("/profile.jsp") ? "active" : "" %>">Profile</a>
+                        <a href="change_password.jsp" class="<%= currentPage.equals("/change_password.jsp") ? "active" : "" %>">Change Password</a>
                         <a href="LogoutServlet" class="logout-btn">Logout</a>
                     </div>
                 </div>
@@ -264,68 +282,35 @@ body {
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var links = document.querySelectorAll('.nav-link');
-            var logoutButton = document.querySelector('.logout-btn');
-            var homePageLink = "HRhome.jsp";
-            var leaveRequestCount = <%= pendingLeavesCount %>;
-            var attendanceUpdateCount = <%= attendanceUpdateCount %>;
-            var leavesMainBadge = document.getElementById('leavesMainCount');
-            var leavesSubBadge = document.getElementById('leavesSubCount');
-            var attendanceMainBadge = document.getElementById('attendanceMainCount');
-            var attendanceSubBadge = document.getElementById('attendanceSubCount');
+        // Your existing JavaScript for badge updates
+        var leaveRequestCount = <%= pendingLeavesCount %>;
+        var attendanceUpdateCount = <%= attendanceUpdateCount %>;
+        var leavesMainBadge = document.getElementById('leavesMainCount');
+        var leavesSubBadge = document.getElementById('leavesSubCount');
+        var attendanceMainBadge = document.getElementById('attendanceMainCount');
+        var attendanceSubBadge = document.getElementById('attendanceSubCount');
 
-            function setActiveLink() {
-                var activeLink = localStorage.getItem('activeLink');
-                if (activeLink) {
-                    links.forEach(function(link) {
-                        if (link.href === activeLink) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
+        function updateBadge(element, count) {
+            if (count > 0) {
+                element.textContent = count;
+                element.style.display = 'inline';
+            } else {
+                element.style.display = 'none';
             }
+        }
 
-            setActiveLink();
+        function updateLeavesBadges(count) {
+            updateBadge(leavesMainBadge, count);
+            updateBadge(leavesSubBadge, count);
+        }
 
-            links.forEach(function(link) {
-                link.addEventListener('click', function() {
-                    links.forEach(function(link) {
-                        link.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    localStorage.setItem('activeLink', this.href);
-                });
-            });
-
-            if (logoutButton) {
-                logoutButton.addEventListener('click', function() {
-                    localStorage.setItem('activeLink', homePageLink);
-                });
-            }
-            
-            function updateBadge(element, count) {
-                if (count > 0) {
-                    element.textContent = count;
-                    element.style.display = 'inline';
-                } else {
-                    element.style.display = 'none';
-                }
-            }
-
-            function updateLeavesBadges(count) {
-                updateBadge(leavesMainBadge, count);
-                updateBadge(leavesSubBadge, count);
-            }
-
-            function updateAttendanceBadges(count) {
-                updateBadge(attendanceMainBadge, count);
-                updateBadge(attendanceSubBadge, count);
-            }
-         
-            updateLeavesBadges(leaveRequestCount);
-            updateAttendanceBadges(attendanceUpdateCount);
-        });
+        function updateAttendanceBadges(count) {
+            updateBadge(attendanceMainBadge, count);
+            updateBadge(attendanceSubBadge, count);
+        }
+     
+        updateLeavesBadges(leaveRequestCount);
+        updateAttendanceBadges(attendanceUpdateCount);
     </script>
 </body>
 </html>
