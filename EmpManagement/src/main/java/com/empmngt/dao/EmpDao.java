@@ -1459,6 +1459,23 @@ public class EmpDao {
 		
 		return a;
 	}
+	
+	
+	public Leaves getLeaveRecordById(int lid) throws SQLException {
+	    Leaves l = new Leaves();
+	    String qry = "SELECT e.firstname as username, l.startdate, l.enddate "
+	               + "FROM employees e JOIN leaves l ON e.employeeid = l.employeeid WHERE l.leaveid = ?";
+	    PreparedStatement pstmt = con.prepareStatement(qry);
+	    pstmt.setInt(1, lid);
+	    ResultSet rs = pstmt.executeQuery();
+
+	    if (rs.next()) {
+	        l.setFname(rs.getString("username"));
+	        l.setFromDate(rs.getString("startdate"));
+	        l.setToDate(rs.getString("enddate"));
+	    }
+	    return l;
+	}
 
  
 }
