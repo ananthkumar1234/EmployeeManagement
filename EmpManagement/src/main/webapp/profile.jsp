@@ -166,7 +166,7 @@
                     </div>
                     <div class="form-group">
                         <label for="gender">Gender:</label>
-                        <select id="gender" name="gender" readonly>
+                        <select id="gender" name="gender" disabled>
                             <option value="">Select Gender</option>
                             <option value="Male" <%= "Male".equals(emp.getGender()) ? "selected" : "" %>>Male</option>
                             <option value="Female" <%= "Female".equals(emp.getGender()) ? "selected" : "" %>>Female</option>
@@ -175,7 +175,7 @@
                     </div>
                     <div class="form-group">
                         <label for="ms">Marital Status:</label>
-                        <select id="ms" name="ms" readonly>
+                        <select id="ms" name="ms" disabled>
                             <option value="">Select Marital Status</option>
                             <option value="Single" <%= "Single".equals(emp.getMaritalStatus()) ? "selected" : "" %>>Single</option>
                             <option value="Married" <%= "Married".equals(emp.getMaritalStatus()) ? "selected" : "" %>>Married</option>
@@ -183,7 +183,7 @@
                     </div>
                     <div class="form-group">
                         <label for="bg">Blood Group:</label>
-                        <select id="bg" name="bg" readonly>
+                        <select id="bg" name="bg" disabled>
                             <option value="">Select Blood Group</option>
                             <option value="A Positive" <%= "A Positive".equals(emp.getBloodgroup()) ? "selected" : "" %>>A Positive</option>
                             <option value="A Negative" <%= "A Negative".equals(emp.getBloodgroup()) ? "selected" : "" %>>A Negative</option>
@@ -237,7 +237,7 @@
                     </div>
                     <div class="form-group">
                         <label for="role">Role:</label>
-                        <select id="role" name="role" readonly>
+                        <select id="role" name="role" disabled>
                             <option value="">Select Role</option>
                             <% for (Roles r : list) { %>
                                 <option value="<%= r.getRoleId() %>" <%= (r.getRoleId() == emp.getRoleId()) ? "selected" : "" %>><%= r.getRoleName() %></option>
