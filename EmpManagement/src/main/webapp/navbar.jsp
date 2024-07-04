@@ -1,13 +1,13 @@
-<%@ page import="com.empmngt.dao.EmpDao" %>
-<%@ page import="com.empmngt.enities.Employees" %>
-<%@ page import="com.empmngt.jdbc.DBConnect" %>
+<%@ page import="com.empmngt.dao.EmpDao"%>
+<%@ page import="com.empmngt.enities.Employees"%>
+<%@ page import="com.empmngt.jdbc.DBConnect"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Navbar</title>
-    <style>
-        * {
+<title>Navbar</title>
+<style>
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -44,7 +44,7 @@ body {
 .navbar .nav-links {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Add this line */
+    margin-left: auto;
 }
 
 .navbar a {
@@ -56,13 +56,10 @@ body {
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
     height: 60px;
-    position: relative; /* Add this line */
+    position: relative;
 }
 
-.navbar a:hover,
-.navbar a:focus,
-.navbar a:active,
-.navbar a.active {
+.navbar a:hover, .navbar a:focus, .navbar a:active, .navbar a.active {
     background-color: #ff9800;
     color: white;
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
@@ -90,6 +87,9 @@ body {
     background-color: inherit;
     height: 60px;
     padding: 0 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .dropdown .dropbtn img {
@@ -105,7 +105,7 @@ body {
     min-width: 160px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    right: 0;  /* Position the dropdown menu to the right */
+    right: 0;
 }
 
 .dropdown-content a {
@@ -131,57 +131,54 @@ body {
     border-radius: 50%;
     padding: 2px 6px;
     font-size: 0.75em;
-    position: absolute;
-    top: 40px;
-    right: 6px;
-    transform: translate(50%, -50%);
+    margin-left: 5px;
 }
 
-@media (max-width: 768px) {
+.dropdown .dropbtn .count-wrapper {
+    margin-left: 5px;
+}
+
+.dropdown-content .count {
+    margin-left: 5px;
+}
+
+@media ( max-width : 768px) {
     .navbar {
         padding: 0 10px;
     }
-
-    .navbar a,
-    .dropdown .dropbtn {
+    .navbar a, .dropdown .dropbtn {
         padding: 0 5px;
         font-size: 14px;
     }
-
     .navbar .header h1 {
         font-size: 18px;
     }
-
     .dropdown .dropbtn img {
         width: 30px;
         height: 30px;
     }
-
     .dropdown-content {
         min-width: 120px;
     }
 }
-
-    </style>
+</style>
 </head>
 <body>
 
     <%
         HttpSession se = request.getSession(); 
-    	Object role = se.getAttribute("role");
+        Object role = se.getAttribute("role");
         int empid = ((Employees)(se.getAttribute("employee"))).getEmpId();
-    	int pendingLeavesCount=0;
-    	int attendanceUpdateCount=0;
+        int pendingLeavesCount = 0;
+        int attendanceUpdateCount = 0;
         EmpDao empDao = new EmpDao(DBConnect.getConnection());
         if(role.equals("HR")){
-        pendingLeavesCount = empDao.getPendingLeavesCount();   //HR
-        attendanceUpdateCount=empDao.getAttendanceUpdateCount();   //HR
-        }else
-        {
-        	 pendingLeavesCount = empDao.getPendingLeavesForMgrCount(empid);   //MGR
-             attendanceUpdateCount=empDao.getMgrAttendanceUpdateCount(empid);   //MGR
+            pendingLeavesCount = empDao.getPendingLeavesCount();
+            attendanceUpdateCount = empDao.getAttendanceUpdateCount();
+        } else if(role.equals("Manager")) {
+            pendingLeavesCount = empDao.getPendingLeavesForMgrCount(empid);
+            attendanceUpdateCount = empDao.getMgrAttendanceUpdateCount(empid);
         }
-        	
     %>
     <div class="navbar-container">
         <div class="navbar">
@@ -191,25 +188,65 @@ body {
 
             <div class="nav-links">
                 <a href="HRhome.jsp" class="nav-link">Home</a>
-                <a href="leaveReq.jsp" class="nav-link">Leaves</a>
-                <% %>
+
                 <% if (role.equals("HR")) { %>
-                <a href="addEmp.jsp" class="nav-link">Add Employee</a>
-                <a href="empDetails.jsp" class="nav-link">Employees</a>
-                <a href="AddHolidays.jsp" class="nav-link">Add Holidays</a>
+                <div class="dropdown">
+                    <button class="dropbtn">Employees</button>
+                    <div class="dropdown-content">
+                        <a href="addEmp.jsp" class="nav-link">Add Employee</a>
+                        <a href="empDetails.jsp" class="nav-link">Employees</a>
+                    </div>
+                </div>
                 <% } %>
+
                 <% if (role.equals("HR") || role.equals("Manager")) { %>
-                <a href="Leaves.jsp" class="nav-link leave-requests">Leave Requests <span class="count" style="display: none;"></span></a>
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        Leaves
+                        <span class="count-wrapper">
+                            <span class="count leaves-count" id="leavesMainCount"></span>
+                        </span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="leaveReq.jsp" class="nav-link">Leaves</a>
+                        <a href="Leaves.jsp" class="nav-link leave-requests">
+                            Leave Requests <span class="count leaves-count" id="leavesSubCount"></span>
+                        </a>
+                    </div>
+                </div>
+                <% } else { %>
+                <a href="leaveReq.jsp" class="nav-link">Leaves</a>
                 <% } %>
+
+                <% if (role.equals("HR") || role.equals("Manager")) { %>
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        Attendance
+                        <span class="count-wrapper">
+                            <span class="count attendance-count" id="attendanceMainCount"></span>
+                        </span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="attendance.jsp" class="nav-link">Attendance</a>
+                        <a href="AttendanceUpdateRequest.jsp" class="nav-link attendance-update">
+                            Attendance Update <span class="count attendance-count" id="attendanceSubCount"></span>
+                        </a>
+                    </div>
+                </div>
+                <% } else { %>
                 <a href="attendance.jsp" class="nav-link">Attendance</a>
-                <% if (!role.equals("HR")) { %>
-                <a href="ViewHolidays.jsp" class="nav-link">Holidays</a>
                 <% } %>
+
                 <% if (role.equals("Manager")) { %>
                 <a href="Reportees.jsp" class="nav-link">Reportees</a>
                 <% } %>
-                <% if (role.equals("HR") || role.equals("Manager")) { %>
-                <a href="AttendanceUpdateRequest.jsp" class="nav-link attendance-update">Attendance Update <span class="count" style="display: none;"></span></a>
+
+                <% if (role.equals("HR")) { %>
+                <a href="AddHolidays.jsp" class="nav-link">Add Holidays</a>
+                <% } %>
+
+                <% if (!role.equals("HR")) { %>
+                <a href="ViewHolidays.jsp" class="nav-link">Holidays</a>
                 <% } %>
 
                 <div class="dropdown">
@@ -232,9 +269,11 @@ body {
             var logoutButton = document.querySelector('.logout-btn');
             var homePageLink = "HRhome.jsp";
             var leaveRequestCount = <%= pendingLeavesCount %>;
-            var attendanceUpdateCount=<%= attendanceUpdateCount %>;
-            var leaveRequestsLink = document.querySelector('.leave-requests .count');
-            var attendanceUpdateLink = document.querySelector('.attendance-update .count');
+            var attendanceUpdateCount = <%= attendanceUpdateCount %>;
+            var leavesMainBadge = document.getElementById('leavesMainCount');
+            var leavesSubBadge = document.getElementById('leavesSubCount');
+            var attendanceMainBadge = document.getElementById('attendanceMainCount');
+            var attendanceSubBadge = document.getElementById('attendanceSubCount');
 
             function setActiveLink() {
                 var activeLink = localStorage.getItem('activeLink');
@@ -265,26 +304,27 @@ body {
                 });
             }
             
-            function updateLeaveRequestBadge(count) {
+            function updateBadge(element, count) {
                 if (count > 0) {
-                    leaveRequestsLink.textContent = count;
-                    leaveRequestsLink.style.display = 'inline';
+                    element.textContent = count;
+                    element.style.display = 'inline';
                 } else {
-                    leaveRequestsLink.style.display = 'none';
+                    element.style.display = 'none';
                 }
             }
 
-            function AttendanceUpdateBadge(count) {
-                if (count > 0) {
-                	attendanceUpdateLink.textContent = count;
-                	attendanceUpdateLink.style.display = 'inline';
-                } else {
-                	attendanceUpdateLink.style.display = 'none';
-                }
+            function updateLeavesBadges(count) {
+                updateBadge(leavesMainBadge, count);
+                updateBadge(leavesSubBadge, count);
+            }
+
+            function updateAttendanceBadges(count) {
+                updateBadge(attendanceMainBadge, count);
+                updateBadge(attendanceSubBadge, count);
             }
          
-            updateLeaveRequestBadge(leaveRequestCount);
-            AttendanceUpdateBadge(attendanceUpdateCount);
+            updateLeavesBadges(leaveRequestCount);
+            updateAttendanceBadges(attendanceUpdateCount);
         });
     </script>
 </body>
