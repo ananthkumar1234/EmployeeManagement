@@ -22,10 +22,10 @@ public class AddRoleServlet extends HttpServlet{
 		try (Connection con = DBConnect.getConnection()) {
 
 			EmpDao eDao = new EmpDao(con);
-//			String msg = eDao.insertRole(roleName);
-//			if(!msg.isEmpty())
+			String msg = eDao.insertRole(roleName);
+			if(!msg.isEmpty())
 			{
-//				req.setAttribute("msg", msg);
+				req.setAttribute("msg", msg);
 				req.getRequestDispatcher("addEmp.jsp").forward(req, resp);
 			}
 		}catch(Exception e)
