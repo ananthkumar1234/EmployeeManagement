@@ -78,8 +78,10 @@ public class Attendance {
 	@Override
 	public String toString() {
 		return "Attendance [attendId=" + attendId + ", empId=" + empId + ", date=" + date + ", checkin=" + checkin
-				+ ", checkout=" + checkout + "]";
+				+ ", checkout=" + checkout + ", newcheckin=" + newcheckin + ", newcheckout=" + newcheckout
+				+ ", remarks=" + remarks + ", isButtonClicked=" + isButtonClicked + ", name=" + name + "]";
 	}
+	
 	
 	
 }

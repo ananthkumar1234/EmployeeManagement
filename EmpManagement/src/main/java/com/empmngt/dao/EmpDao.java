@@ -1365,7 +1365,8 @@ public class EmpDao {
 		String qry= "SELECT " +
                 "emp.email AS employee_email, " +
                 "hr.email AS hr_email, " +
-                "mgr.email AS manager_email " +
+                "mgr.email AS manager_email," +
+                "emp.FirstName as username "+
                 "FROM employees emp " +
                 "JOIN roles r ON emp.roleid = r.roleid " +
                 "JOIN manager m ON emp.employeeid = m.employee " +
@@ -1381,6 +1382,7 @@ public class EmpDao {
 			em.setEmployeeEmail(rs.getString("employee_email"));
 			em.setManagerEmail(rs.getString("manager_email"));
 			em.setHrEmail(rs.getString("hr_email"));
+			em.setUsername(rs.getString("username"));
 			return em;
 		}
 		return null;
@@ -1402,6 +1404,7 @@ public class EmpDao {
 	            leave.setFromDate(rs.getString("startDate"));
 	            leave.setToDate(rs.getString("endDate"));
 	            leave.setAppliedReason(rs.getString("reason"));
+	            leave.setTotalDays(rs.getInt("totaldays"));
 	            return leave;
 	        }
 	    return leave;
@@ -1430,6 +1433,31 @@ public class EmpDao {
 			return "Role Added";
 		}
 		return "Something went Wrong!!!";
+	}
+	
+	
+	
+	
+	public Attendance GetAttendanceUpdateForEmail(int aid) throws SQLException
+	{
+		Attendance a = new Attendance();
+		String qry="SELECT au.AttendanceId, au.Name, au.Date, au.CheckInTime as NewCheckInTime, au.CheckOutTime as NewCheckOutTime, att.CheckInTime as OldCheckInTime, att.CheckOutTime as OldCheckOutTime FROM AttendanceUpdate au JOIN Attendance att ON att.AttendanceId = ?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, aid);
+		ResultSet rs = ps.executeQuery();
+		if(rs.next())
+		{
+			a.setAttendId(rs.getInt("AttendanceId"));
+			a.setName(rs.getString("Name"));
+			a.setDate(rs.getString("Date"));
+			a.setNewcheckin(rs.getString("NewCheckInTime"));
+			a.setNewcheckout(rs.getString("NewCheckOutTime"));
+			a.setCheckin(rs.getString("OldCheckInTime"));
+			a.setCheckout(rs.getString("OldCheckOutTime"));
+			return a;
+		}
+		
+		return a;
 	}
 
  

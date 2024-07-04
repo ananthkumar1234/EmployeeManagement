@@ -5,6 +5,8 @@ public class EmailDetails {
 	private String employeeEmail;
     private String hrEmail;
     private String managerEmail;
+    private String username;
+    
 	public String getEmployeeEmail() {
 		return employeeEmail;
 	}
@@ -22,6 +24,12 @@ public class EmailDetails {
 	}
 	public void setManagerEmail(String managerEmail) {
 		this.managerEmail = managerEmail;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
     
 

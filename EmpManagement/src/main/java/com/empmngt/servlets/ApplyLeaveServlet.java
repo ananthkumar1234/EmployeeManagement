@@ -162,13 +162,23 @@ public class ApplyLeaveServlet extends HttpServlet {
 	        String verificationLink = "http://localhost:8080/EmpManagement/login.jsp";
 
 	        // Set the actual message
-	        String htmlContent = "<p>Employee " + uname + " has applied for leave.</p>"
-	                           + "<p>Leave Details:</p>"
-	                           + "<p>Start Date: " + leave.getFromDate() + "</p>"
-	                           + "<p>End Date: " + leave.getToDate() + "</p>"
-	                           + "<p>Reason: " + leave.getAppliedReason() + "</p>"
-	                           + "<p>Click the link below to approve or reject the leave request:</p>"
-	                           + "<a href=\"" + verificationLink + "\">Login to Manage Leave Requests</a>";
+	        String htmlContent="";
+	        if (leave.getTotalDays() == 1) {
+	            htmlContent = "<p>Employee " + uname + " has applied for leave.</p>"
+	                        + "<p>Leave Details:</p>"
+	                        + "<p>Date: " + leave.getFromDate() + "</p>"
+	                        + "<p>Reason: " + leave.getAppliedReason() + "</p>"
+	                        + "<p>Click the link below to approve or reject the leave request:</p>"
+	                        + "<a href=\"" + verificationLink + "\">Login to Manage Leave Requests</a>";
+	        } else {
+	            htmlContent = "<p>Employee " + uname + " has applied for leave.</p>"
+	                        + "<p>Leave Details:</p>"
+	                        + "<p>From Date: " + leave.getFromDate() + "</p>"
+	                        + "<p>To Date: " + leave.getToDate() + "</p>"
+	                        + "<p>Reason: " + leave.getAppliedReason() + "</p>"
+	                        + "<p>Click the link below to approve or reject the leave request:</p>"
+	                        + "<a href=\"" + verificationLink + "\">Login to Manage Leave Requests</a>";
+	        }
 
 	        message.setContent(htmlContent, "text/html");
 
