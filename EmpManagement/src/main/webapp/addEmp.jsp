@@ -129,7 +129,7 @@ input[type="submit"]:hover {
 
 .star {
 	color: red;
-	font-size: 20px;
+	font-size: 16px;
 }
 
 .error-message {
@@ -398,7 +398,9 @@ input[type="submit"]:hover {
 						</div>
 						<div class="form-group">
 							<label for="password">Password<span class="star">*</span></label>
-							<input type="password" id="password" name="password"> <span
+							<input type="password" id="password" name="password" required 
+                   pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 
+                   title="Password must be at least 6 characters long, contain at least one numeric digit, and one uppercase letter."> <span
 								class="error-message" id="pwdError">Please enter
 								Password.</span>
 						</div>

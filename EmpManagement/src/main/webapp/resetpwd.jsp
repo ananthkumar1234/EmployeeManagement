@@ -56,6 +56,11 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .star
+        {
+        color:red;
+        size:16px;
+        }
 
 </style>
 <body>
@@ -71,11 +76,15 @@ String msg = (String)request.getAttribute("msg");
              <label for="username">UserName:</label>
             <input type="text" id="uname" name="uname" value="<%= uname %>" readonly>
             
-            <label for="newPassword">New Password:</label>
-            <input type="password" id="newPassword" name="newPassword" required>
+            <label for="newPassword">New Password<span class="star">*</span></label>
+            <input type="password" id="newPassword" name="newPassword" required 
+                   pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 
+                   title="Password must be at least 6 characters long, contain at least one numeric digit, and one uppercase letter.">
             
-            <label for="confirmPassword">Confirm Password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <label for="confirmPassword">Confirm Password<span class="star">*</span></label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required 
+                   pattern="(?=.*\d)(?=.*[A-Z]).{6,}" 
+                   title="Password must be at least 6 characters long, contain at least one numeric digit, and one uppercase letter.">
             
             <input type="submit" value="Reset">
         </form>
