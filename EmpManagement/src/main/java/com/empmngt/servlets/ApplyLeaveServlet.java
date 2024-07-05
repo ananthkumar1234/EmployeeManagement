@@ -62,8 +62,17 @@ public class ApplyLeaveServlet extends HttpServlet {
 			lev.setToDate(toDate);
 			lev.setLeaveType(leaveType);
 			lev.setAppliedReason(reason);
-			lev.setLeaveStatus("Pending");
+			
+			if ("leave".equals(origin)) {
+				lev.setLeaveStatus("Pending");
+			} else {
+				lev.setLeaveStatus("Approved");
+			}
+			
+			
+			
 			lev.setAppliedDate(date);
+			
 
 
 			int n= eDao.availDays(id);
@@ -86,7 +95,9 @@ public class ApplyLeaveServlet extends HttpServlet {
 			{
 				lev.setTotalDays(days);
 				int leaveid=eDao.applyLeave(lev);
-				if(leaveid!=0) {	
+				System.out.println(leaveid);
+				if(leaveid!=0) {
+					
 					eDao.updateLeavestock(leaveid);
 					EmailDetails em = eDao.getEmails(id);
 

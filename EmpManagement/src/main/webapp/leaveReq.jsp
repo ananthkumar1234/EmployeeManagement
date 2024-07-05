@@ -381,7 +381,7 @@ int n = er2.availDays(eid2);
                     <td><%= e.getFromDate() %></td>
                     <td><%= e.getToDate() %></td>
                     <td><%= e.getLeaveType() %></td>
-                    <td><a href="cancel?id=<%= e.getLeaveId() %>" class="btn btn-sm btn-danger">Cancel</a></td>
+                    <td><a href="cancel?id=<%= e.getLeaveId() %>&eid=<%= e.getEmployeeID() %>" class="btn btn-sm btn-danger">Cancel</a></td>
                 </tr>
                 <% } %>
             </tbody>

@@ -45,7 +45,10 @@ public class UpdateRejectReasonServlet extends HttpServlet {
 			EmpDao eDao = new EmpDao(con);
 			Employees em = eDao.getEmpData(uname);
 			eDao.updaterejectreason(rs, eid,leaveid,status);
-			eDao.updateLeavestock(leaveid);
+			if(!status.equals("Approved"))
+			{
+				eDao.updateLeavestock(leaveid);
+			}
 
 			if(session.getAttribute("role").equals("HR")) {
 				int n = eDao.getPendingLeavesCount();
