@@ -677,7 +677,7 @@ public class EmpDao {
 	public int applyLeave(Leaves leave) {
 		int leaveid =0;
 		String query = "INSERT INTO Leaves (EmployeeID, LeaveType, StartDate, EndDate, LeaveStatus, AppliedDate, reason,TotalDays) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
-		String qry2="SELECT LeaveId FROM Leaves ORDER BY employeeID DESC LIMIT 1";
+		String qry2="SELECT LeaveId FROM Leaves ORDER BY LeaveId DESC LIMIT 1";
 
 		try (PreparedStatement pst = con.prepareStatement(query)) {
 			pst.setInt(1, leave.getEmployeeID());
@@ -977,6 +977,7 @@ public class EmpDao {
 	
 	public void updateLeavestock(int leaveid) throws SQLException
 	{
+		
 		String qry="select employeeid,leavestatus,totaldays from leaves where leaveid=?";
 		PreparedStatement ps=con.prepareStatement(qry);
 		ps.setInt(1, leaveid);
@@ -986,9 +987,8 @@ public class EmpDao {
 		String status = rs.getString("leavestatus");
 		int totaldays = rs.getInt("totaldays");
 
-		if(status.equals("Pending") || status.equals("Rejected")) {
 		updateAvailLeaves(totaldays,empid,status);
-		}
+
 		ps.close();
 		rs.close();
 		
@@ -997,10 +997,11 @@ public class EmpDao {
 	
 	public void updateAvailLeaves(int totaldays,int empid,String status) throws SQLException
 	{
+		
 		String qry="update leavesStock set availableleaves = availableleaves - ?,consumedleaves = consumedleaves + ? where employeeid=?";
 		String qry2="update leavesStock set availableleaves = availableleaves + ?,consumedleaves = consumedleaves - ? where employeeid=?";
 		int i=0;
-		if(status.equals("Pending"))
+		if(status.equals("Pending")||status.equals("Approved"))
 		{
 			PreparedStatement ps=con.prepareStatement(qry);
 			ps.setInt(1, totaldays);
